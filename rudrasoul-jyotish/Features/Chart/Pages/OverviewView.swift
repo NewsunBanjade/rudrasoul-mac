@@ -35,9 +35,9 @@ struct OverviewView: View {
 
                     MetricTile(
                         title: "Sunrise / Sunset",
-                        value: "\(chart.sunriseString) – \(chart.sunsetString)",
+                        value: sunriseSunsetValue,
                         subtitle: chart.timezoneString.components(separatedBy: " ").first ?? "LMT",
-                        badge: "Vara"
+                        badge: chart.vara?.name ?? "Vara"
                     )
                 }
 
@@ -154,6 +154,7 @@ struct OverviewView: View {
                                 NorthIndianChartCanvas(
                                     houseRasis: effectiveD1HouseRasis,
                                     housePlanets: effectiveD1HousePlanets,
+                                    extraHouseLabels: d1UpagrahaHouseLabels,
                                     isRotated: isD1Rotated,
                                     onShowChartFromHouse: { house in
                                         if let selectedSign = effectiveD1HouseRasis[house] {
@@ -174,6 +175,7 @@ struct OverviewView: View {
                                 SouthIndianChartCanvas(
                                     lagnaRasi: effectiveD1LagnaRasi,
                                     planetRasis: Dictionary(uniqueKeysWithValues: chart.planets.map { ($0.graha, $0.rasi) }),
+                                    extraRasiLabels: d1UpagrahaRasiLabels,
                                     isRotated: isD1Rotated,
                                     onShowChartFromRasi: { rasi in
                                         let natalSignRaw = chart.lagnaPosition.rasi.rawValue
@@ -230,6 +232,7 @@ struct OverviewView: View {
                                     NorthIndianChartCanvas(
                                         houseRasis: effD9Houses,
                                         housePlanets: effectiveD9HousePlanets(d9: d9),
+                                        extraHouseLabels: d9UpagrahaHouseLabels(d9: d9),
                                         isRotated: isD9Rotated,
                                         onShowChartFromHouse: { house in
                                             if let selectedSign = effD9Houses[house] {
@@ -250,6 +253,7 @@ struct OverviewView: View {
                                     SouthIndianChartCanvas(
                                         lagnaRasi: effD9Lagna,
                                         planetRasis: d9.planetRasis,
+                                        extraRasiLabels: d9UpagrahaRasiLabels(d9: d9),
                                         isRotated: isD9Rotated,
                                         onShowChartFromRasi: { rasi in
                                             let natalD9SignRaw = d9.lagnaRasi.rawValue
@@ -386,6 +390,8 @@ struct OverviewView: View {
                         RoundedRectangle(cornerRadius: 6)
                             .stroke(DesignColor.separator, lineWidth: 1)
                     )
+
+                    UpagrahaTileRow(upagrahas: chart.upagrahas)
                 }
             }
             .padding(DesignSpacing.medium)
@@ -395,6 +401,51 @@ struct OverviewView: View {
 
     private var moonPosition: PlanetPosition? {
         chart.planets.first(where: { $0.graha == .moon })
+    }
+
+    private var sunriseSunsetValue: String {
+        let sunrise = chart.sunriseString.isEmpty ? "—" : chart.sunriseString
+        let sunset = chart.sunsetString.isEmpty ? "—" : chart.sunsetString
+        return "\(sunrise) – \(sunset)"
+    }
+
+    /// Gulika and Maandi labels keyed by the house they occupy from the effective D-1 lagna.
+    private var d1UpagrahaHouseLabels: [Int: [String]] {
+        var map: [Int: [String]] = [:]
+        let effLagnaRaw = effectiveD1LagnaRasi.rawValue
+        for upagraha in chart.upagrahas ?? [] {
+            let house = ((upagraha.rasi.rawValue - effLagnaRaw + 12) % 12) + 1
+            map[house, default: []].append(upagraha.kind.shortAbbreviation)
+        }
+        return map
+    }
+
+    private var d1UpagrahaRasiLabels: [Rasi: [String]] {
+        var map: [Rasi: [String]] = [:]
+        for upagraha in chart.upagrahas ?? [] {
+            map[upagraha.rasi, default: []].append(upagraha.kind.shortAbbreviation)
+        }
+        return map
+    }
+
+    private func d9UpagrahaHouseLabels(d9: VargaChart) -> [Int: [String]] {
+        var map: [Int: [String]] = [:]
+        let effLagnaRaw = effectiveD9LagnaRasi.rawValue
+        for kind in UpagrahaKind.allCases {
+            guard let rasi = d9.upagrahaRasis?[kind] else { continue }
+            let house = ((rasi.rawValue - effLagnaRaw + 12) % 12) + 1
+            map[house, default: []].append(kind.shortAbbreviation)
+        }
+        return map
+    }
+
+    private func d9UpagrahaRasiLabels(d9: VargaChart) -> [Rasi: [String]] {
+        var map: [Rasi: [String]] = [:]
+        for kind in UpagrahaKind.allCases {
+            guard let rasi = d9.upagrahaRasis?[kind] else { continue }
+            map[rasi, default: []].append(kind.shortAbbreviation)
+        }
+        return map
     }
 
     private var isD1Rotated: Bool {
@@ -481,5 +532,43 @@ struct OverviewView: View {
             map[h] = Rasi(rawValue: rasiIndex)
         }
         return map
+    }
+}
+
+/// One metric tile per upagraha (Gulika, Maandi) in the D-1 chart, or a placeholder
+/// when the chart was computed before upagrahas existed.
+private struct UpagrahaTileRow: View {
+    let upagrahas: [UpagrahaPosition]?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: DesignSpacing.xSmall) {
+            Text("Upagrahas")
+                .designTextStyle(.caption)
+                .foregroundStyle(DesignColor.secondaryText)
+
+            HStack(spacing: DesignSpacing.small) {
+                ForEach(UpagrahaKind.allCases) { kind in
+                    tile(for: kind)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func tile(for kind: UpagrahaKind) -> some View {
+        if let position = upagrahas?.first(where: { $0.kind == kind }) {
+            MetricTile(
+                title: "\(kind.rawValue) (\(kind.shortAbbreviation))",
+                value: "\(position.rasi.sanskritName) \(position.formattedDMS)",
+                subtitle: "\(position.nakshatra.name) Pada \(position.pada)",
+                badge: "Bhava \(position.bhava)"
+            )
+        } else {
+            MetricTile(
+                title: "\(kind.rawValue) (\(kind.shortAbbreviation))",
+                value: "—",
+                subtitle: "Not computed for this chart"
+            )
+        }
     }
 }

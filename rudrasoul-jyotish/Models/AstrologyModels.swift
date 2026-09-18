@@ -416,6 +416,12 @@ struct VargaChart: Identifiable, Hashable, Sendable, Codable {
     let division: VargaDivision
     let lagnaRasi: Rasi
     let planetRasis: [Graha: Rasi]
+    /// Gulika and Maandi placed in this division. Nil for charts computed before upagrahas existed.
+    var upagrahaRasis: [UpagrahaKind: Rasi]? = nil
+    /// Shashtiamsa deity of the lagna. Only populated for D-60.
+    var lagnaAmsaDetail: ShashtiamsaDetail? = nil
+    /// Shashtiamsa deity of each planet. Only populated for D-60.
+    var planetAmsaDetails: [Graha: ShashtiamsaDetail]? = nil
 }
 
 // MARK: - Shadbala Breakdown
@@ -531,6 +537,8 @@ struct SarvatobhadraData: Hashable, Sendable, Codable {
 
     let cells: [Cell]
     let vedhas: [String]
+    /// Structured vedha records; nil for charts computed before the SBC calculator existed.
+    var vedhaDetails: [SarvatobhadraVedha]? = nil
 }
 
 struct KotaChakraData: Hashable, Sendable, Codable {
@@ -548,6 +556,10 @@ struct KotaChakraData: Hashable, Sendable, Codable {
     let zoneAssignments: [Zone: [Graha]]
     let praveshaGrahas: [Graha]
     let nirgamaGrahas: [Graha]
+    /// The Janma (birth Moon) nakshatra the chakra is counted from; nil for legacy data.
+    var janmaNakshatra: Nakshatra? = nil
+    /// All 28 cells in sequence from the Janma nakshatra; nil for legacy data.
+    var cells: [KotaCell]? = nil
 }
 
 // MARK: - Notes & Predictions
@@ -607,6 +619,30 @@ struct ChartDetail: Identifiable, Hashable, Sendable, Codable {
     let kota: KotaChakraData
     var notes: [ChartNote]
     var predictions: [PredictionRecord]
+
+    // Fields below were added after the first schema. They are optional so that
+    // chart JSON written by earlier builds still decodes.
+
+    /// Birth instant in UTC; the reference for every dasha and upagraha timing.
+    var utcBirthDate: Date? = nil
+    /// Sunrise of the Jyotish day of birth (the sunrise preceding the birth), in UTC.
+    var sunriseDate: Date? = nil
+    /// Sunset following `sunriseDate`, in UTC.
+    var sunsetDate: Date? = nil
+    /// Weekday counted from sunrise to sunrise.
+    var vara: Vara? = nil
+    /// Gulika and Maandi in the D-1 chart.
+    var upagrahas: [UpagrahaPosition]? = nil
+    /// Chara karakas, arudha padas, karakamsa, and the special lagnas.
+    var jaimini: JaiminiData? = nil
+    var yoginiDasha: DashaTimeline? = nil
+    var charaDasha: DashaTimeline? = nil
+    var lagnamsaDasha: DashaTimeline? = nil
+
+    /// Timelines of every alternative dasha system that has been computed, in menu order.
+    var alternativeDashaTimelines: [DashaTimeline] {
+        [yoginiDasha, charaDasha, lagnamsaDasha].compactMap { $0 }
+    }
 }
 
 // MARK: - Verified Golden Fixtures

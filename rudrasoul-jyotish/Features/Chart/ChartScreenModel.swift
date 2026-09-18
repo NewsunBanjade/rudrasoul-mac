@@ -18,6 +18,7 @@ final class ChartScreenModel {
         case dasha
         case nakshatra
         case yogasAndDoshas
+        case jaimini
 
         // Chakras
         case sarvatobhadra
@@ -49,6 +50,7 @@ final class ChartScreenModel {
             case .dasha: "timeline.selection"
             case .nakshatra: "sparkles"
             case .yogasAndDoshas: "checkmark.seal"
+            case .jaimini: "point.3.connected.trianglepath.dotted"
             case .sarvatobhadra: "grid"
             case .kota: "shield"
             case .progressionAndTransit: "arrow.triangle.swap"
@@ -71,6 +73,7 @@ final class ChartScreenModel {
             .dasha,
             .nakshatra,
             .yogasAndDoshas,
+            .jaimini,
         ]
 
         static let chakras: [Destination] = [

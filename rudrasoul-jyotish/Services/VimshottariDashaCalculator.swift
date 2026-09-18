@@ -58,6 +58,70 @@ struct VimshottariDashaCalculator: Sendable {
         return Result(nodes: nodes, currentDashaVector: activeVector(in: nodes, at: referenceDate).joined(separator: " › "))
     }
 
+    /// The direct sub-periods of `node`, one level deeper than the node itself.
+    ///
+    /// Uses the same proportional rule as the stored tree: each child lasts the
+    /// parent duration × the child lord's Vimshottari years / 120, the first child
+    /// is the parent lord, and the fixed order follows (BPHS ch. 46). Sookshma and
+    /// prana periods are produced on demand this way instead of being persisted.
+    /// A prana node has no deeper level, so it returns an empty list.
+    func subPeriods(of node: DashaNode, birthDate: Date, referenceDate: Date = Date()) -> [DashaNode] {
+        guard node.level != .prana else { return [] }
+        let childLevel = nextLevel(after: node.level)
+        let parentDurationDays = node.endDate.timeIntervalSince(node.startDate) / secondsPerDay
+        var childStart = node.startDate
+        return lordsStarting(with: node.lord).map { childLord in
+            let childDuration = durationDays(parentDurationDays: parentDurationDays, lord: childLord)
+            defer { childStart = childStart.addingTimeInterval(childDuration * secondsPerDay) }
+            return makeNode(
+                lord: childLord,
+                startDate: childStart,
+                periodDurationDays: childDuration,
+                level: childLevel,
+                maximumLevel: childLevel,
+                birthDate: birthDate,
+                referenceDate: referenceDate
+            )
+        }
+    }
+
+    /// The chain of stored nodes containing `date`, outermost first.
+    ///
+    /// Only the children carried by the tree are followed; deeper levels come
+    /// from `subPeriods(of:birthDate:referenceDate:)`.
+    static func activePath(in nodes: [DashaNode], at date: Date) -> [DashaNode] {
+        var path: [DashaNode] = []
+        var candidates = nodes
+        while let match = candidates.first(where: { date >= $0.startDate && date < $0.endDate }) {
+            path.append(match)
+            candidates = match.children
+        }
+        return path
+    }
+
+    /// Formats a span of days as compact years, months, and days, e.g. "6y 4m 12d".
+    ///
+    /// A month is one twelfth of `yearLengthDays`. Zero units are omitted except
+    /// that at least one unit is always shown.
+    static func formattedDuration(days: Double, yearLengthDays: Double) -> String {
+        guard yearLengthDays > 0, days.isFinite else { return "0d" }
+        let monthLengthDays = yearLengthDays / 12
+        // The epsilon keeps an exact multiple of a year from reading as "Ny 11m 30d".
+        let tolerance = 1e-6
+        var remaining = max(days, 0)
+        let years = Int(remaining / yearLengthDays + tolerance)
+        remaining -= Double(years) * yearLengthDays
+        let months = Int(max(remaining, 0) / monthLengthDays + tolerance)
+        remaining -= Double(months) * monthLengthDays
+        let wholeDays = max(Int(remaining.rounded()), 0)
+
+        var parts: [String] = []
+        if years > 0 { parts.append("\(years)y") }
+        if months > 0 { parts.append("\(months)m") }
+        if wholeDays > 0 || parts.isEmpty { parts.append("\(wholeDays)d") }
+        return parts.joined(separator: " ")
+    }
+
     private func makeNode(
         lord: Graha,
         startDate: Date,
@@ -147,7 +211,7 @@ struct VimshottariDashaCalculator: Sendable {
     }
 
     private func formattedDuration(days: Double) -> String {
-        String(format: "%.2f y", days / yearLengthDays)
+        Self.formattedDuration(days: days, yearLengthDays: yearLengthDays)
     }
 
     private func normalized(_ longitude: Double) -> Double {

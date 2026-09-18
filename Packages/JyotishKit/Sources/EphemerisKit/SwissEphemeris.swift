@@ -12,6 +12,13 @@ public actor SwissEphemeris: EphemerisProviding {
         static let sidereal: Int32 = 65_536
     }
 
+    private enum RiseFlag {
+        static let rise: Int32 = 1
+        static let set: Int32 = 2
+        /// SE_BIT_HINDU_RISING: disc centre, no refraction, geocentric, no ecliptic latitude.
+        static let hinduRising: Int32 = 256 | 512 | 128
+    }
+
     private init() {
         if let dataDirectory = Self.bundledEphemerisDataDirectory() {
             dataDirectory.path.withCString(jp_swe_set_ephemeris_path)
@@ -128,6 +135,54 @@ public actor SwissEphemeris: EphemerisProviding {
             midheaven: result.angles.1,
             vertex: result.angles.3
         )
+    }
+
+    public func riseSetTime(
+        of graha: Graha,
+        event: RiseSetEvent,
+        after julianDay: JulianDay,
+        coordinates: GeographicCoordinates,
+        source: EphemerisSource = .swiss
+    ) throws -> JulianDay {
+        guard (-90 ... 90).contains(coordinates.latitude),
+              (-180 ... 180).contains(coordinates.longitude)
+        else {
+            throw EphemerisError.invalidCoordinates
+        }
+
+        let rsmi = (event == .rise ? RiseFlag.rise : RiseFlag.set) | RiseFlag.hinduRising
+        var eventJulianDay = 0.0
+        var error = [CChar](repeating: 0, count: 256)
+        let code = error.withUnsafeMutableBufferPointer { buffer in
+            jp_swe_rise_trans(
+                julianDay.value,
+                graha.rawValue,
+                sourceFlag(for: source),
+                rsmi,
+                coordinates.latitude,
+                coordinates.longitude,
+                &eventJulianDay,
+                buffer.baseAddress,
+                buffer.count
+            )
+        }
+
+        if code == -2 {
+            throw EphemerisError.bodyDoesNotRiseOrSet
+        }
+        guard code >= 0 else {
+            let message = String(
+                decoding: error.prefix { $0 != 0 }.map { UInt8(bitPattern: $0) },
+                as: UTF8.self
+            )
+            throw EphemerisError.calculationFailed(message)
+        }
+        return JulianDay(eventJulianDay)
+    }
+
+    public func ayanamsaValue(at julianDay: JulianDay, ayanamsa: Ayanamsa) -> Double {
+        jp_swe_set_sidereal_mode(ayanamsa.rawValue)
+        return jp_swe_get_ayanamsa_ut(julianDay.value)
     }
 
     private func sourceFlag(for source: EphemerisSource) -> Int32 {
