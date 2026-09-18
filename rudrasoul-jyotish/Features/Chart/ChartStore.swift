@@ -14,60 +14,19 @@ final class ChartStore: LibraryProviding {
 
     init(repository: any ChartRepository = SQLiteChartRepository.shared) {
         self.repository = repository
-        loadDefaultFixtures()
         Task {
             await reloadFromRepository()
         }
     }
 
-    private func loadDefaultFixtures() {
-        let tagore = GoldenChartFixtures.tagore
-        let gandhi = GoldenChartFixtures.gandhi
-
-        chartDetails[tagore.id] = tagore
-        chartDetails[gandhi.id] = gandhi
-
-        let tagoreMoon = tagore.planets.first(where: { $0.graha == .moon })
-        let gandhiMoon = gandhi.planets.first(where: { $0.graha == .moon })
-
-        chartsList = [
-            LibraryChartDisplayData(
-                id: tagore.id,
-                name: tagore.name,
-                location: tagore.locationName,
-                localDate: tagore.birthDate,
-                calendar: .gregorian,
-                lagnaRasi: tagore.lagnaPosition.rasi.sanskritName,
-                moonNakshatra: tagoreMoon?.nakshatra.name,
-                moonRasi: tagoreMoon?.rasi.sanskritName,
-                currentDasha: tagore.currentDashaVector,
-                gender: tagore.gender
-            ),
-            LibraryChartDisplayData(
-                id: gandhi.id,
-                name: gandhi.name,
-                location: gandhi.locationName,
-                localDate: gandhi.birthDate,
-                calendar: .gregorian,
-                lagnaRasi: gandhi.lagnaPosition.rasi.sanskritName,
-                moonNakshatra: gandhiMoon?.nakshatra.name,
-                moonRasi: gandhiMoon?.rasi.sanskritName,
-                currentDasha: gandhi.currentDashaVector,
-                gender: gandhi.gender
-            )
-        ]
-    }
-
     func reloadFromRepository() async {
         do {
             let repoCharts = try await repository.fetchAllCharts()
-            if !repoCharts.isEmpty {
-                self.chartsList = repoCharts
-                for chart in repoCharts {
-                    if chartDetails[chart.id] == nil {
-                        if let detail = try? await repository.fetchChartDetail(id: chart.id) {
-                            self.chartDetails[chart.id] = detail
-                        }
+            self.chartsList = repoCharts
+            for chart in repoCharts {
+                if chartDetails[chart.id] == nil {
+                    if let detail = try? await repository.fetchChartDetail(id: chart.id) {
+                        self.chartDetails[chart.id] = detail
                     }
                 }
             }

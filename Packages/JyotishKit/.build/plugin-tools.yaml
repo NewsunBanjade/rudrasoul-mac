@@ -124,11 +124,11 @@ commands:
     outputs: ["/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.product/Objects.LinkFileList"]
     description: "Write auxiliary file /Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.product/Objects.LinkFileList"
 
-  "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKit_EphemerisKit.bundle/Resources":
+  "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKit_EphemerisKit.bundle/ephe":
     tool: copy-tool
-    inputs: ["/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/Resources/"]
-    outputs: ["/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKit_EphemerisKit.bundle/Resources/"]
-    description: "Copying /Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/Resources"
+    inputs: ["/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/Resources/ephe/"]
+    outputs: ["/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKit_EphemerisKit.bundle/ephe/"]
+    description: "Copying /Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/Resources/ephe"
 
   "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt":
     tool: write-auxiliary-file
@@ -192,7 +192,7 @@ commands:
 
   "EphemerisKit-arm64-apple-macosx26.0-debug.module-resources":
     tool: phony
-    inputs: ["/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKit_EphemerisKit.bundle/Resources/"]
+    inputs: ["/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKit_EphemerisKit.bundle/ephe/"]
     outputs: ["<EphemerisKit-arm64-apple-macosx26.0-debug.module-resources>"]
 
   "PackageStructure":

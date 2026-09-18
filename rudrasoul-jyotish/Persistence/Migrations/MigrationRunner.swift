@@ -5,7 +5,7 @@ import os
 struct MigrationRunner: Sendable {
     let migrations: [any Migration]
 
-    init(migrations: [any Migration] = [MigrationV1_InitialSchema()]) {
+    init(migrations: [any Migration] = [MigrationV1_InitialSchema(), MigrationV2_RemoveSeededCharts()]) {
         self.migrations = migrations.sorted { $0.version < $1.version }
     }
 

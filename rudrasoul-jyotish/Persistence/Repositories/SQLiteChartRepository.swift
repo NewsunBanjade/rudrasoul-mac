@@ -45,7 +45,6 @@ final class SQLiteChartRepository: ChartRepository {
 
     func initialize() throws {
         try migrationRunner.run(on: database)
-        try seedFixturesIfEmpty()
     }
 
     func countCharts() throws -> Int {
@@ -56,15 +55,6 @@ final class SQLiteChartRepository: ChartRepository {
             return stmt.columnInt(at: 0)
         }
         return 0
-    }
-
-    func seedFixturesIfEmpty() throws {
-        let count = try countCharts()
-        if count == 0 {
-            PersistenceLogger.repository.info("Database is empty; seeding verified golden fixtures.")
-            try saveChart(detail: GoldenChartFixtures.tagore)
-            try saveChart(detail: GoldenChartFixtures.gandhi)
-        }
     }
 
     func exportDatabase(to destinationURL: URL) throws {

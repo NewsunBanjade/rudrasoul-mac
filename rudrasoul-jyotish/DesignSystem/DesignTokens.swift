@@ -2,11 +2,11 @@ import SwiftUI
 
 enum DesignColor {
     static let accent = Color.accentColor
-    static let primaryText = Color.primary
-    static let secondaryText = Color.secondary
-    static let background = Color(nsColor: .windowBackgroundColor)
-    static let groupedBackground = Color(nsColor: .underPageBackgroundColor)
-    static let separator = Color(nsColor: .separatorColor)
+    static let primaryText = Color("InkPrimary")
+    static let secondaryText = Color("InkSecondary")
+    static let background = Color("SurfaceCanvas")
+    static let groupedBackground = Color("SurfaceFill")
+    static let separator = Color("Hairline")
     static let natal = Color("Natal")
     static let transit = Color("Transit")
     static let malefic = Color("Malefic")

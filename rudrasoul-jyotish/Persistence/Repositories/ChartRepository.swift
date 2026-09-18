@@ -9,5 +9,4 @@ protocol ChartRepository: Sendable {
     func countCharts() async throws -> Int
     func exportDatabase(to destinationURL: URL) async throws
     func restoreDatabase(from sourceURL: URL) async throws
-    func seedFixturesIfEmpty() async throws
 }

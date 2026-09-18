@@ -208,9 +208,6 @@
     "Autosaved to library" : {
 
     },
-    "Ayanamsa" : {
-
-    },
     "Ayanamsa: %@" : {
 
     },
@@ -237,9 +234,6 @@
 
     },
     "Bhava (Nat)" : {
-
-    },
-    "Bhava / House System" : {
 
     },
     "Bhava Chalit & House Cusps" : {
@@ -301,6 +295,9 @@
 
     },
     "Challenging" : {
+
+    },
+    "Chart calculation failed" : {
 
     },
     "Chart Display Style" : {
@@ -603,7 +600,7 @@
     "Cheshta" : {
 
     },
-    "City / Atlas Lookup" : {
+    "City / OpenStreetMap Lookup" : {
 
     },
     "City name" : {
@@ -718,7 +715,7 @@
     "End Date" : {
 
     },
-    "Enter birth coordinates, temporal calendar, and calculation settings" : {
+    "Enter birth details and search OpenStreetMap for the birth location" : {
 
     },
     "Ephemeris" : {
@@ -743,9 +740,6 @@
 
     },
     "Fagan / Bradley" : {
-
-    },
-    "Fagan/Bradley" : {
 
     },
     "Favorable" : {
@@ -1049,9 +1043,6 @@
     "Lord / Level" : {
 
     },
-    "Lunar Node (Rahu / Ketu)" : {
-
-    },
     "Lunar Node (Rahu/Ketu)" : {
 
     },
@@ -1122,6 +1113,9 @@
 
     },
     "Occupants" : {
+
+    },
+    "OK" : {
 
     },
     "Open Chart" : {
@@ -1244,6 +1238,9 @@
     "Save Note" : {
 
     },
+    "Search OpenStreetMap" : {
+
+    },
     "Shadbala (Sixfold Planetary Strength)" : {
 
     },
@@ -1358,13 +1355,13 @@
     "Time Zone" : {
 
     },
-    "Toggle Sidebar (⌃⌘S)" : {
-
-    },
     "Total (Rupas)" : {
 
     },
     "Total Samudaya Bindus: %lld (Standard 337) · Standard Sign Threshold: ≥ 28 Bindus" : {
+
+    },
+    "Traditional Lahiri ayanamsa, true nodes, and whole-sign bhavas are used for every new chart." : {
 
     },
     "Transit Position (Gochara)" : {

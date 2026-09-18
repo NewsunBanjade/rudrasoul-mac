@@ -23,7 +23,7 @@ let package = Package(
         .target(
             name: "EphemerisKit",
             dependencies: ["CSwissEph"],
-            resources: [.copy("Resources")]
+            resources: [.copy("Resources/ephe")]
         ),
         .testTarget(
             name: "EphemerisKitTests",

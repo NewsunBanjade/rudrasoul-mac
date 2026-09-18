@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		8707B44C305CF0D600972AD1 /* agents.md in Resources */ = {isa = PBXBuildFile; fileRef = 8707B448305CF0D600972AD1 /* agents.md */; };
 		8707B4A3305CF3D400972AD1 /* MEMORY.md in Resources */ = {isa = PBXBuildFile; fileRef = 8707B4A0305CF3D400972AD1 /* MEMORY.md */; };
-		8707B4A5305CF3D400972AD1 /* TODO.md in Resources */ = {isa = PBXBuildFile; fileRef = 8707B4A2305CF3D400972AD1 /* TODO.md */; };
 		E9E00001305CF3D400972AD1 /* EphemerisKit in Frameworks */ = {isa = PBXBuildFile; productRef = E9E00002305CF3D400972AD1 /* EphemerisKit */; };
 /* End PBXBuildFile section */
 
@@ -36,7 +35,6 @@
 		8707B431305BF6A600972AD1 /* rudrasoul-jyotishUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "rudrasoul-jyotishUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8707B448305CF0D600972AD1 /* agents.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = agents.md; sourceTree = "<group>"; };
 		8707B4A0305CF3D400972AD1 /* MEMORY.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MEMORY.md; sourceTree = "<group>"; };
-		8707B4A2305CF3D400972AD1 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -96,7 +94,6 @@
 				8707B434305BF6A600972AD1 /* rudrasoul-jyotishUITests */,
 				8707B41B305BF6A500972AD1 /* Products */,
 				8707B4A0305CF3D400972AD1 /* MEMORY.md */,
-				8707B4A2305CF3D400972AD1 /* TODO.md */,
 				8707B4D2305CF3F500972AD1 /* screen */,
 				8707B448305CF0D600972AD1 /* agents.md */,
 			);
@@ -239,7 +236,6 @@
 			files = (
 				8707B44C305CF0D600972AD1 /* agents.md in Resources */,
 				8707B4A3305CF3D400972AD1 /* MEMORY.md in Resources */,
-				8707B4A5305CF3D400972AD1 /* TODO.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -428,6 +424,7 @@
 				DEVELOPMENT_TEAM = 3QRB9SALNV;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -461,6 +458,7 @@
 				DEVELOPMENT_TEAM = 3QRB9SALNV;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
