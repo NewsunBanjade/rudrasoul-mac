@@ -310,3 +310,73 @@ struct SarvatobhadraVedha: Identifiable, Hashable, Sendable, Codable {
     let targetLabel: String
     let isBenefic: Bool
 }
+
+// MARK: - Planetary relationships
+
+/// The compound (panchadha maitri) relationship of one planet with another, BPHS Ch. 3, vv. 58–59.
+enum PlanetaryRelation: String, CaseIterable, Sendable, Codable {
+    case adhiMitra = "Adhi Mitra"
+    case mitra = "Mitra"
+    case sama = "Sama"
+    case shatru = "Shatru"
+    case adhiShatru = "Adhi Shatru"
+
+    /// The sign dignity a planet has when the lord of its sign bears this relationship to it.
+    var dignity: Dignity {
+        switch self {
+        case .adhiMitra: .greatFriend
+        case .mitra: .friend
+        case .sama: .neutral
+        case .shatru: .enemy
+        case .adhiShatru: .greatEnemy
+        }
+    }
+
+    var shortLabel: String {
+        switch self {
+        case .adhiMitra: "AM"
+        case .mitra: "M"
+        case .sama: "S"
+        case .shatru: "E"
+        case .adhiShatru: "AE"
+        }
+    }
+}
+
+// MARK: - Shadbala components
+
+/// The individual virupa contributions that make up a planet's Shadbala (BPHS Ch. 27).
+struct ShadbalaComponents: Hashable, Sendable, Codable {
+    // Sthana Bala
+    let ucchaBala: Double
+    let saptavargajaBala: Double
+    let ojayugmaBala: Double
+    let kendradiBala: Double
+    let drekkanaBala: Double
+    // Kala Bala
+    let nathonnathaBala: Double
+    let pakshaBala: Double
+    let tribhagaBala: Double
+    let abdaBala: Double
+    let masaBala: Double
+    let varaBala: Double
+    let horaBala: Double
+    let ayanaBala: Double
+    /// How the Cheshta bala was obtained, e.g. "Chesta kendra 123.4°" or "Equals Ayana bala".
+    let cheshtaNote: String
+}
+
+/// Strength of one house: lord's Shadbala, directional strength and aspects (BPHS Ch. 28).
+struct BhavaBala: Identifiable, Hashable, Sendable, Codable {
+    var id: Int { house }
+    let house: Int
+    let rasi: Rasi
+    let lord: Graha
+    let bhavadhipatiBala: Double
+    let bhavaDigBala: Double
+    let bhavaDrishtiBala: Double
+    let totalVirupas: Double
+    let rank: Int
+
+    var totalRupas: Double { totalVirupas / 60 }
+}

@@ -24,7 +24,7 @@ struct ChartScreen: View {
         }
         .toolbar {
             ToolbarItemGroup(placement: .navigation) {
-                if !model.isLibraryView && model.destination != .settings {
+                if isChartPage {
                     activeChartSelectorMenu
                 }
             }
@@ -35,9 +35,21 @@ struct ChartScreen: View {
                 } label: {
                     Label("library.toolbar.newChart", systemImage: "plus")
                 }
-                .keyboardShortcut("n", modifiers: [.command])
+                .help("New chart (⌘N)")
 
-                if !model.isLibraryView && model.destination != .settings {
+                if isChartPage {
+                    if model.isRecalculating {
+                        ProgressView()
+                            .controlSize(.small)
+                            .help("Recalculating…")
+                    } else {
+                        Button("Recalculate", systemImage: "arrow.clockwise") {
+                            model.recalculateActiveChart()
+                        }
+                        .help("Recalculate this chart with the current engine (⇧⌘R)")
+                        .disabled(model.chartDetail == nil)
+                    }
+
                     Button("chart.toolbar.share", systemImage: "square.and.arrow.up") {}
                         .disabled(true)
 
@@ -53,16 +65,33 @@ struct ChartScreen: View {
         }
         .sheet(isPresented: $model.isPresentingNewChart) {
             NewChartSheet { newChart in
-                model.selectAndOpenChart(newChart.id)
+                model.openChart(newChart.id)
             }
+        }
+        .alert("Recalculation failed", isPresented: recalculationErrorBinding) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(model.recalculationError ?? "")
         }
     }
 
+    private var isChartPage: Bool {
+        model.destination?.isChartPage ?? false
+    }
+
+    private var recalculationErrorBinding: Binding<Bool> {
+        Binding(
+            get: { model.recalculationError != nil },
+            set: { if !$0 { model.recalculationError = nil } }
+        )
+    }
+
+    /// Quick switch between library charts; picking one opens (or focuses) its tab.
     private var activeChartSelectorMenu: some View {
         Menu {
             ForEach(model.charts) { chart in
                 Button {
-                    model.selectAndOpenChart(chart.id)
+                    model.openChart(chart.id)
                 } label: {
                     HStack {
                         Text(chart.name)
@@ -73,7 +102,7 @@ struct ChartScreen: View {
                 }
             }
             Divider()
-            Button("+ New Chart...") {
+            Button("New Chart…") {
                 model.isPresentingNewChart = true
             }
         } label: {
@@ -91,6 +120,7 @@ struct ChartScreen: View {
             .clipShape(RoundedRectangle(cornerRadius: 6))
         }
         .menuStyle(.borderlessButton)
+        .help("Open another chart in a tab")
     }
 }
 
@@ -133,15 +163,32 @@ private struct ChartSidebar: View {
     }
 }
 
+/// The detail column: the tab strip, then the library, the settings, or the analysis page
+/// of the selected tab's chart.
 private struct ChartWorkspace: View {
     @Bindable var model: ChartScreenModel
+    @State private var pendingDeletion: LibraryChartDisplayData?
 
     var body: some View {
         VStack(spacing: 0) {
-            if isLibraryView {
-                libraryContentView
+            if !model.tabs.isEmpty {
+                ChartTabStrip(
+                    items: model.tabs.map { ChartTabStrip.Item(id: $0.id, title: model.title(for: $0)) },
+                    selectedID: model.highlightedTabID,
+                    isLibrarySelected: model.isLibraryView,
+                    onSelectLibrary: { model.showLibrary() },
+                    onSelect: { model.selectTab($0) },
+                    onClose: { model.closeTab($0) },
+                    onCloseOthers: { model.closeOtherTabs(keeping: $0) },
+                    onNewChart: { model.isPresentingNewChart = true }
+                )
+            }
+
+            if model.isLibraryView {
+                LibraryWorkspace(model: model, pendingDeletion: $pendingDeletion)
             } else if currentDestination == .settings {
-                settingsContentView
+                SettingsScreen(isEmbedded: true)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if let chart = model.chartDetail {
                 ChartIdentityHeader(
                     title: LocalizedStringKey(chart.name),
@@ -150,34 +197,47 @@ private struct ChartWorkspace: View {
 
                 destinationView(for: currentDestination, chart: chart)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .id(chart.id)
+                    .environment(\.recalculateChart, { model.recalculateActiveChart() })
 
                 AppStatusBar(
                     leadingText: LocalizedStringKey("Ayanamsa: \(chart.ayanamsaName) · \(chart.nodeCalculation)"),
-                    trailingText: LocalizedStringKey("Swiss Ephemeris DE440 · Online")
+                    trailingText: LocalizedStringKey("Swiss Ephemeris · \(chart.houseSystemName ?? "Whole Sign") bhavas")
                 )
             } else {
-                ChartIdentityHeader(
-                    title: "chart.header.unavailable.title",
-                    subtitle: "chart.header.unavailable.subtitle"
-                )
-                ContentUnavailableView(
-                    LocalizedStringKey(currentDestination.titleKey),
-                    systemImage: currentDestination.systemImage,
-                    description: Text("chart.workspace.unavailable.description")
-                )
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                AppStatusBar(
-                    leadingText: "chart.status.settingsUnavailable",
-                    trailingText: "chart.status.dataUnavailable"
-                )
+                unavailableView
             }
         }
         .background(DesignColor.background)
         .navigationTitle(LocalizedStringKey(currentDestination.titleKey))
+        .confirmationDialog(
+            "Delete this chart?",
+            isPresented: deletionBinding,
+            titleVisibility: .visible
+        ) {
+            Button("Delete Chart", role: .destructive) {
+                if let pendingDeletion {
+                    model.deleteChart(id: pendingDeletion.id)
+                }
+                pendingDeletion = nil
+            }
+            Button("Cancel", role: .cancel) {
+                pendingDeletion = nil
+            }
+        } message: {
+            Text("“\(pendingDeletion?.name ?? "")” and its notes and predictions are removed from the library. This cannot be undone.")
+        }
     }
 
-    private var isLibraryView: Bool {
-        currentDestination == .allCharts || currentDestination == .recent
+    private var deletionBinding: Binding<Bool> {
+        Binding(
+            get: { pendingDeletion != nil },
+            set: { if !$0 { pendingDeletion = nil } }
+        )
+    }
+
+    private var currentDestination: ChartScreenModel.Destination {
+        model.destination ?? .allCharts
     }
 
     /// Birth time, place, and ayanamsa; the ayanamsa value is omitted when the chart predates its calculation.
@@ -193,225 +253,31 @@ private struct ChartWorkspace: View {
         return parts.joined(separator: " · ")
     }
 
-    private var currentDestination: ChartScreenModel.Destination {
-        model.destination ?? .overview
-    }
-
-    private var libraryContentView: some View {
-        VStack(spacing: 0) {
-            // Library Sub-header Toolbar with Search and Filter
-            HStack(spacing: DesignSpacing.small) {
-                // Search Input Field
-                HStack(spacing: 6) {
-                    Image(systemName: "magnifyingglass")
-                        .font(.system(size: 12))
-                        .foregroundStyle(DesignColor.secondaryText)
-
-                    TextField("library.search.prompt", text: $model.searchText)
-                        .textFieldStyle(.plain)
-                        .font(.system(size: 12))
-
-                    if !model.searchText.isEmpty {
-                        Button {
-                            model.searchText = ""
-                        } label: {
-                            Image(systemName: "xmark.circle.fill")
-                                .font(.system(size: 11))
-                                .foregroundStyle(DesignColor.secondaryText)
-                        }
-                        .buttonStyle(.plain)
-                        .help("Clear search")
-                    }
-                }
-                .padding(.horizontal, 8)
-                .padding(.vertical, 5)
-                .background(DesignColor.background)
-                .clipShape(RoundedRectangle(cornerRadius: 6))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 6)
-                        .stroke(DesignColor.separator, lineWidth: 1)
-                )
-                .frame(minWidth: 200, idealWidth: 260, maxWidth: 340)
-
-                // Filter Button with Badge
-                Button {
-                    model.isFilterPopoverPresented.toggle()
-                } label: {
-                    HStack(spacing: 5) {
-                        Image(systemName: model.hasActiveFilters ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundStyle(model.hasActiveFilters ? DesignColor.accent : DesignColor.secondaryText)
-                        Text("Filter")
-                            .font(.system(size: 12, weight: .medium))
-                        if model.hasActiveFilters {
-                            Text("\(model.activeFilterCount)")
-                                .font(.system(size: 10, weight: .bold))
-                                .padding(.horizontal, 5)
-                                .padding(.vertical, 1)
-                                .background(DesignColor.accent)
-                                .foregroundStyle(Color.white)
-                                .clipShape(Capsule())
-                        }
-                    }
-                }
-                .buttonStyle(.bordered)
-                .controlSize(.small)
-                .popover(isPresented: $model.isFilterPopoverPresented, arrowEdge: .bottom) {
-                    ChartFilterPopover(
-                        selectedLagna: $model.filterLagna,
-                        selectedMoonRasi: $model.filterMoonRasi,
-                        selectedDashaLord: $model.filterDashaLord,
-                        selectedGender: $model.filterGender,
-                        onReset: { model.resetFilters() }
-                    )
-                }
-
-                if model.hasActiveFilters || !model.searchText.isEmpty {
-                    Button("Reset All") {
-                        model.searchText = ""
-                        model.resetFilters()
-                    }
-                    .buttonStyle(.plain)
-                    .font(.caption)
-                    .foregroundStyle(DesignColor.secondaryText)
-                }
-
-                Spacer()
-
-                Text("\(model.visibleCharts.count) of \(model.charts.count) Charts")
-                    .designTextStyle(.caption, monospacedDigits: true)
-                    .foregroundStyle(DesignColor.secondaryText)
-            }
-            .padding(.horizontal, DesignSpacing.small)
-            .padding(.vertical, 6)
-            .background(DesignColor.groupedBackground)
-            .overlay(alignment: .bottom) { Divider() }
-
-            // Active Filter Token Strip
-            if model.hasActiveFilters {
-                ActiveFilterTokenBar(
-                    lagna: model.filterLagna,
-                    moonRasi: model.filterMoonRasi,
-                    dashaLord: model.filterDashaLord,
-                    gender: model.filterGender,
-                    onRemoveLagna: { model.filterLagna = nil },
-                    onRemoveMoonRasi: { model.filterMoonRasi = nil },
-                    onRemoveDashaLord: { model.filterDashaLord = nil },
-                    onRemoveGender: { model.filterGender = nil },
-                    onClearAll: { model.resetFilters() }
-                )
-            }
-
-            if model.visibleCharts.isEmpty {
-                ContentUnavailableView {
-                    Label("No Charts Match Filters", systemImage: "line.3.horizontal.decrease.circle")
-                } description: {
-                    Text("Try adjusting your search terms or clearing astrological filters.")
-                } actions: {
-                    Button("Reset Filters") {
-                        model.searchText = ""
-                        model.resetFilters()
-                    }
-                    .buttonStyle(.borderedProminent)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-                Table(model.visibleCharts, selection: $model.selectedLibraryChartID) {
-                    TableColumn("library.column.name") { chart in
-                        HStack(spacing: 6) {
-                            Image(systemName: "person.crop.circle")
-                                .foregroundStyle(DesignColor.accent)
-                                .font(.system(size: 13))
-                            Text(chart.name)
-                                .designTextStyle(.body)
-                                .fontWeight(.medium)
-                        }
-                    }
-                    .width(min: 160, ideal: 190)
-
-                    TableColumn("Lagna") { chart in
-                        Text(chart.lagnaRasi ?? "—")
-                            .designTextStyle(.body)
-                            .foregroundStyle(DesignColor.primaryText)
-                    }
-                    .width(min: 80, ideal: 100)
-
-                    TableColumn("Moon Star") { chart in
-                        Text(chart.moonNakshatra ?? "—")
-                            .designTextStyle(.body)
-                            .foregroundStyle(DesignColor.secondaryText)
-                    }
-                    .width(min: 90, ideal: 110)
-
-                    TableColumn("Running Dasha") { chart in
-                        if let dasha = chart.currentDasha {
-                            Text(dasha.components(separatedBy: "›").prefix(2).joined(separator: "› "))
-                                .designTextStyle(.body, monospacedDigits: true)
-                                .foregroundStyle(DesignColor.accent)
-                        } else {
-                            Text("—")
-                                .designTextStyle(.body)
-                                .foregroundStyle(DesignColor.secondaryText)
-                        }
-                    }
-                    .width(min: 110, ideal: 130)
-
-                    TableColumn("library.column.location") { chart in
-                        Text(chart.location)
-                            .designTextStyle(.body)
-                            .foregroundStyle(DesignColor.secondaryText)
-                    }
-                    .width(min: 140, ideal: 180)
-
-                    TableColumn("library.column.date") { chart in
-                        Text(chart.localDate, format: .dateTime.year().month().day())
-                            .designTextStyle(.body, monospacedDigits: true)
-                    }
-                    .width(min: 90, ideal: 100)
-                }
-                .contextMenu {
-                    if let selectedID = model.selectedLibraryChartID {
-                        Button("Open Chart in Overview") {
-                            model.selectAndOpenChart(selectedID)
-                        }
-                        Divider()
-                        Button(role: .destructive) {
-                            model.deleteChart(id: selectedID)
-                        } label: {
-                            Label("Delete Chart", systemImage: "trash")
-                        }
-                    }
-                }
-            }
-
-            // Bottom bar with chart count and Open Chart button
-            HStack {
-                Text("library.status.count \(model.visibleCharts.count)")
-                    .designTextStyle(.caption, monospacedDigits: true)
-                    .foregroundStyle(DesignColor.secondaryText)
-
-                Spacer()
-
-                Button("Open Chart") {
-                    if let selectedID = model.selectedLibraryChartID {
-                        model.selectAndOpenChart(selectedID)
-                    }
+    private var unavailableView: some View {
+        Group {
+            ChartIdentityHeader(
+                title: "chart.header.unavailable.title",
+                subtitle: "chart.header.unavailable.subtitle"
+            )
+            ContentUnavailableView {
+                Label(LocalizedStringKey(currentDestination.titleKey), systemImage: currentDestination.systemImage)
+            } description: {
+                Text("chart.workspace.unavailable.description")
+            } actions: {
+                Button("Show Library") {
+                    model.showLibrary()
                 }
                 .buttonStyle(.borderedProminent)
-                .controlSize(.small)
-                .disabled(model.selectedLibraryChartID == nil)
-                .keyboardShortcut(.defaultAction)
+                Button("New Chart…") {
+                    model.isPresentingNewChart = true
+                }
             }
-            .padding(.horizontal, DesignSpacing.small)
-            .padding(.vertical, DesignSpacing.xSmall)
-            .background(DesignColor.background)
-            .overlay(alignment: .top) { Divider() }
-        }
-    }
-
-    private var settingsContentView: some View {
-        SettingsScreen(isEmbedded: true)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            AppStatusBar(
+                leadingText: "chart.status.settingsUnavailable",
+                trailingText: "chart.status.dataUnavailable"
+            )
+        }
     }
 
     @ViewBuilder
@@ -444,86 +310,7 @@ private struct ChartWorkspace: View {
         case .progressionAndTransit:
             ProgressionTransitView(chart: chart)
         case .notesAndPredictions:
-            NotesPredictionsView(chart: chart)
+            NotesPredictionsView(chart: chart, onUpdate: { model.store.saveChart(detail: $0) })
         }
-    }
-}
-
-private struct ChartInspector: View {
-    let chart: ChartDetail?
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: DesignSpacing.medium) {
-            Text("chart.inspector.title")
-                .designTextStyle(.section)
-
-            if let chart {
-                ScrollView {
-                    VStack(alignment: .leading, spacing: DesignSpacing.small) {
-                        MetricTile(
-                            title: "Native Subject",
-                            value: chart.name,
-                            subtitle: "\(chart.gender) · \(chart.calendarSystem)",
-                            badge: "Natal"
-                        )
-
-                        MetricTile(
-                            title: "Ascendant (Lagna)",
-                            value: "\(chart.lagnaPosition.rasi.sanskritName) \(chart.lagnaPosition.formattedDMS)",
-                            subtitle: "\(chart.lagnaPosition.nakshatra.name) Pada \(chart.lagnaPosition.pada)",
-                            badge: "1st House"
-                        )
-
-                        MetricTile(
-                            title: "Ayanamsa Offset",
-                            value: chart.ayanamsaValueDMS,
-                            subtitle: chart.ayanamsaName,
-                            badge: "Sidereal"
-                        )
-
-                        MetricTile(
-                            title: "Active Vimshottari Vector",
-                            value: chart.currentDashaVector.components(separatedBy: "›").prefix(2).joined(separator: "› "),
-                            subtitle: chart.currentDashaVector,
-                            badge: "Running",
-                            isAuspicious: true
-                        )
-
-                        Divider().padding(.vertical, DesignSpacing.xSmall)
-
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Birth Coordinates")
-                                .designTextStyle(.caption)
-                                .foregroundStyle(DesignColor.secondaryText)
-                            Text("\(chart.latitude), \(chart.longitude)")
-                                .designTextStyle(.body, monospacedDigits: true)
-                            Text(chart.timezoneString)
-                                .designTextStyle(.caption)
-                                .foregroundStyle(DesignColor.secondaryText)
-                        }
-
-                        Divider().padding(.vertical, DesignSpacing.xSmall)
-
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Formed Yogas Count")
-                                .designTextStyle(.caption)
-                                .foregroundStyle(DesignColor.secondaryText)
-                            Text("\(chart.yogas.count) Classical Combinations")
-                                .designTextStyle(.body)
-                                .fontWeight(.medium)
-                        }
-                    }
-                }
-            } else {
-                ContentUnavailableView(
-                    "chart.inspector.unavailable.title",
-                    systemImage: "info.circle",
-                    description: Text("chart.inspector.unavailable.description")
-                )
-                Spacer()
-            }
-        }
-        .padding(DesignSpacing.medium)
-        .background(DesignColor.groupedBackground)
     }
 }

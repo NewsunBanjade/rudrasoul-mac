@@ -52,6 +52,23 @@ factual, and current; do not use it as a changelog.
 - `ChartDetail` is stored whole as JSON (`raw_chart_json`); every field added after V1 is optional with a nil default so older rows still decode.
   Views must tolerate nil (`upagrahas`, `jaimini`, `yoginiDasha`, `charaDasha`, `lagnamsaDasha`, `kota.cells`, `vargas[].upagrahaRasis`).
 - The sidebar has a `Jaimini` analysis page; the Dasha page has a system picker (Vimshottari, Yogini, Chara, Lagnamsa) and a target-date stepper.
+- Several charts can be open at once: `ChartScreenModel` keeps `tabs: [ChartTab]` (chart id + last analysis page) and `selectedTabID`;
+  `ChartTabStrip` renders them above the detail column with a fixed Library tab. The sidebar `destination` is the single source of
+  truth and `syncTabs(to:)` keeps the selected tab's page in step. Menu commands (⌘N, ⌘W, ⇧⌘[ ], ⇧⌘L, ⇧⌘R) live in the App,
+  which owns the one `ChartScreenModel` and uses a `Window` scene (no multi-window).
+- Strength calculators (pure, `Services/`): `GrahaDignityCalculator` (exaltation/moolatrikona/own/compound relationships,
+  combustion), `AshtakavargaCalculator` (BPHS 66 tables, 337 bindus), `ShadbalaCalculator` (+`KalaBala`, +`Drishti` files;
+  Chesta kendra via Meeus mean elements; graha yuddha not applied), `BhavaBalaCalculator` (Bhavadhipati + Dig + Drishti).
+  `ChartCalculationService` fills `planets[].dignity/isCombust`, `shadbala`, `ashtakavarga`, `bhavaBala`, `planetaryRelations`.
+- `ChartStore.recalculateChart(id:)` rebuilds a stored chart from its birth data (`ChartCalculationInput(recomputing:)`), keeping
+  notes and predictions; the toolbar ↻ / ⇧⌘R and the "not computed" placeholders (`StrengthUnavailableView` via the
+  `recalculateChart` environment value) call it. `ChartDetail.utcOffsetSeconds` / `houseSystemName` are stored for this.
+- Transits are real: `ChartCalculationService.transitPositions(at:ayanamsa:nodeCalculation:)`; the Progression & Transit page
+  recomputes on every date change. Yoga detection is still not implemented (the page says so instead of listing nothing).
+- `NotesPredictionsView` takes `onUpdate:`; the workspace persists through `ChartStore.saveChart`. Analysis pages are keyed
+  with `.id(chart.id)` so per-page `@State` resets when the tab changes.
+- New Chart reads the Settings defaults (`defaultAyanamsa`, `defaultLunarNode`, `defaultHouseSystem`; only Lahiri/Raman/KP and
+  Whole Sign/Placidus/Koch/Equal are offered because those are what `EphemerisKit` supports).
 
 ## Implementation constraints
 

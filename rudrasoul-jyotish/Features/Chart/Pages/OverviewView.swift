@@ -1,406 +1,65 @@
 import SwiftUI
 
+/// The chart's front page: the key placements, the D-1 and D-9 kundalis, every position
+/// (Lagna, planets and upagrahas) in one table, the mahadasha timeline, and Shadbala at
+/// a glance.
 struct OverviewView: View {
     let chart: ChartDetail
-    @State private var chartStyle: Int = 0 // 0 = North Indian, 1 = South Indian
-    @State private var d1RotatedHouse: Int = 1 // 1 = Natal D-1 Lagna, 2...12 = Rotated House
-    @State private var d9RotatedHouse: Int = 1 // 1 = Natal D-9 Lagna, 2...12 = Rotated House
+    @State private var style: KundaliStyle = .northIndian
+    @State private var d1Rotation = KundaliRotation()
+    @State private var d9Rotation = KundaliRotation()
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: DesignSpacing.medium) {
-                // Top Quick Metrics Strip
-                HStack(spacing: DesignSpacing.small) {
-                    MetricTile(
-                        title: "Ascendant (Lagna)",
-                        value: "\(chart.lagnaPosition.rasi.sanskritName) \(chart.lagnaPosition.formattedDMS)",
-                        subtitle: "\(chart.lagnaPosition.nakshatra.name) Pada \(chart.lagnaPosition.pada)",
-                        badge: "1st House"
-                    )
-
-                    MetricTile(
-                        title: "Moon Nakshatra",
-                        value: "\(moonPosition?.nakshatra.name ?? "—")",
-                        subtitle: "\(moonPosition?.rasi.sanskritName ?? "") \(moonPosition?.formattedDMS ?? "")",
-                        badge: "Pada \(moonPosition?.pada ?? 1)"
-                    )
-
-                    MetricTile(
-                        title: "Current Dasha",
-                        value: chart.currentDashaVector.components(separatedBy: "›").prefix(2).joined(separator: "› "),
-                        subtitle: chart.currentDashaVector,
-                        badge: "Active",
-                        isAuspicious: true
-                    )
-
-                    MetricTile(
-                        title: "Sunrise / Sunset",
-                        value: sunriseSunsetValue,
-                        subtitle: chart.timezoneString.components(separatedBy: " ").first ?? "LMT",
-                        badge: chart.vara?.name ?? "Vara"
-                    )
-                }
-
-                // Kundali section with style picker
-                VStack(alignment: .leading, spacing: DesignSpacing.small) {
-                    HStack {
-                        Text("Kundali Visuals")
-                            .designTextStyle(.section)
-                        Spacer()
-                        Picker("", selection: $chartStyle) {
-                            Text("North Indian").tag(0)
-                            Text("South Indian").tag(1)
-                        }
-                        .pickerStyle(.segmented)
-                        .controlSize(.small)
-                        .frame(width: 220)
-                    }
-
-                    // Independent rotation active banner
-                    if isD1Rotated || isD9Rotated {
-                        HStack(spacing: DesignSpacing.small) {
-                            Image(systemName: "arrow.triangle.2.circlepath")
-                                .foregroundStyle(DesignColor.accent)
-
-                            if isD1Rotated && isD9Rotated {
-                                Text("Bhavat Bhavam: D-1 (H\(d1RotatedHouse) · \(effectiveD1LagnaRasi.sanskritName)), D-9 (H\(d9RotatedHouse) · \(effectiveD9LagnaRasi.sanskritName))")
-                                    .font(.caption.weight(.medium))
-                                    .foregroundStyle(DesignColor.primaryText)
-                            } else if isD1Rotated {
-                                Text("Bhavat Bhavam: D-1 viewed from House \(d1RotatedHouse) (\(effectiveD1LagnaRasi.sanskritName))")
-                                    .font(.caption.weight(.medium))
-                                    .foregroundStyle(DesignColor.primaryText)
-                            } else {
-                                Text("Bhavat Bhavam: D-9 Navamsha viewed from House \(d9RotatedHouse) (\(effectiveD9LagnaRasi.sanskritName))")
-                                    .font(.caption.weight(.medium))
-                                    .foregroundStyle(DesignColor.primaryText)
-                            }
-
-                            Spacer()
-
-                            if isD1Rotated {
-                                Button("Reset D-1") {
-                                    withAnimation(.easeInOut(duration: 0.2)) {
-                                        d1RotatedHouse = 1
-                                    }
-                                }
-                                .buttonStyle(.bordered)
-                                .controlSize(.mini)
-                            }
-
-                            if isD9Rotated {
-                                Button("Reset D-9") {
-                                    withAnimation(.easeInOut(duration: 0.2)) {
-                                        d9RotatedHouse = 1
-                                    }
-                                }
-                                .buttonStyle(.bordered)
-                                .controlSize(.mini)
-                            }
-
-                            if isD1Rotated && isD9Rotated {
-                                Button("Reset Both") {
-                                    withAnimation(.easeInOut(duration: 0.2)) {
-                                        d1RotatedHouse = 1
-                                        d9RotatedHouse = 1
-                                    }
-                                }
-                                .buttonStyle(.borderedProminent)
-                                .controlSize(.mini)
-                            }
-                        }
-                        .padding(.horizontal, DesignSpacing.small)
-                        .padding(.vertical, 6)
-                        .background(DesignColor.accent.opacity(0.08))
-                        .clipShape(RoundedRectangle(cornerRadius: 6))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 6)
-                                .stroke(DesignColor.accent.opacity(0.25), lineWidth: 1)
-                        )
-                    }
-
-                    HStack(spacing: DesignSpacing.medium) {
-                        // D-1 Rasi Kundali (Rotates independently)
-                        VStack(alignment: .leading, spacing: DesignSpacing.xSmall) {
-                            HStack {
-                                Text("D-1 Rasi Kundali")
-                                    .designTextStyle(.caption)
-                                    .foregroundStyle(DesignColor.secondaryText)
-                                Spacer()
-                                if isD1Rotated {
-                                    HStack(spacing: 4) {
-                                        Text("\(effectiveD1LagnaRasi.sanskritName) (H\(d1RotatedHouse) As)")
-                                            .designTextStyle(.caption, monospacedDigits: true)
-                                            .foregroundStyle(DesignColor.accent)
-                                        Button {
-                                            withAnimation(.easeInOut(duration: 0.2)) {
-                                                d1RotatedHouse = 1
-                                            }
-                                        } label: {
-                                            Image(systemName: "arrow.uturn.backward.circle.fill")
-                                                .foregroundColor(DesignColor.secondaryText)
-                                        }
-                                        .buttonStyle(.plain)
-                                        .help("Reset D-1 to Natal Lagna")
-                                    }
-                                } else {
-                                    Text("\(chart.lagnaPosition.rasi.sanskritName) Lagna")
-                                        .designTextStyle(.caption, monospacedDigits: true)
-                                        .foregroundStyle(DesignColor.accent)
-                                }
-                            }
-
-                            if chartStyle == 0 {
-                                NorthIndianChartCanvas(
-                                    houseRasis: effectiveD1HouseRasis,
-                                    housePlanets: effectiveD1HousePlanets,
-                                    extraHouseLabels: d1UpagrahaHouseLabels,
-                                    isRotated: isD1Rotated,
-                                    onShowChartFromHouse: { house in
-                                        if let selectedSign = effectiveD1HouseRasis[house] {
-                                            let natalSignRaw = chart.lagnaPosition.rasi.rawValue
-                                            let newRotatedHouse = ((selectedSign.rawValue - natalSignRaw + 12) % 12) + 1
-                                            withAnimation(.easeInOut(duration: 0.2)) {
-                                                d1RotatedHouse = newRotatedHouse
-                                            }
-                                        }
-                                    },
-                                    onResetToNatalLagna: {
-                                        withAnimation(.easeInOut(duration: 0.2)) {
-                                            d1RotatedHouse = 1
-                                        }
-                                    }
-                                )
-                            } else {
-                                SouthIndianChartCanvas(
-                                    lagnaRasi: effectiveD1LagnaRasi,
-                                    planetRasis: Dictionary(uniqueKeysWithValues: chart.planets.map { ($0.graha, $0.rasi) }),
-                                    extraRasiLabels: d1UpagrahaRasiLabels,
-                                    isRotated: isD1Rotated,
-                                    onShowChartFromRasi: { rasi in
-                                        let natalSignRaw = chart.lagnaPosition.rasi.rawValue
-                                        let newRotatedHouse = ((rasi.rawValue - natalSignRaw + 12) % 12) + 1
-                                        withAnimation(.easeInOut(duration: 0.2)) {
-                                            d1RotatedHouse = newRotatedHouse
-                                        }
-                                    },
-                                    onResetToNatalLagna: {
-                                        withAnimation(.easeInOut(duration: 0.2)) {
-                                            d1RotatedHouse = 1
-                                        }
-                                    }
-                                )
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
-
-                        // D-9 Navamsha Kundali (Rotates independently)
-                        VStack(alignment: .leading, spacing: DesignSpacing.xSmall) {
-                            if let d9 = chart.vargas.first(where: { $0.division == .d9 }) {
-                                let effD9Lagna = effectiveD9LagnaRasi
-                                let effD9Houses = effectiveD9HouseRasis(d9: d9)
-
-                                HStack {
-                                    Text("D-9 Navamsha Kundali")
-                                        .designTextStyle(.caption)
-                                        .foregroundStyle(DesignColor.secondaryText)
-                                    Spacer()
-                                    if isD9Rotated {
-                                        HStack(spacing: 4) {
-                                            Text("\(effD9Lagna.sanskritName) (H\(d9RotatedHouse) As)")
-                                                .designTextStyle(.caption, monospacedDigits: true)
-                                                .foregroundStyle(DesignColor.accent)
-                                            Button {
-                                                withAnimation(.easeInOut(duration: 0.2)) {
-                                                    d9RotatedHouse = 1
-                                                }
-                                            } label: {
-                                                Image(systemName: "arrow.uturn.backward.circle.fill")
-                                                    .foregroundColor(DesignColor.secondaryText)
-                                            }
-                                            .buttonStyle(.plain)
-                                            .help("Reset D-9 to Natal Lagna")
-                                        }
-                                    } else {
-                                        Text("\(d9.lagnaRasi.sanskritName) Lagna")
-                                            .designTextStyle(.caption, monospacedDigits: true)
-                                            .foregroundStyle(DesignColor.secondaryText)
-                                    }
-                                }
-
-                                if chartStyle == 0 {
-                                    NorthIndianChartCanvas(
-                                        houseRasis: effD9Houses,
-                                        housePlanets: effectiveD9HousePlanets(d9: d9),
-                                        extraHouseLabels: d9UpagrahaHouseLabels(d9: d9),
-                                        isRotated: isD9Rotated,
-                                        onShowChartFromHouse: { house in
-                                            if let selectedSign = effD9Houses[house] {
-                                                let natalD9SignRaw = d9.lagnaRasi.rawValue
-                                                let newRotatedHouse = ((selectedSign.rawValue - natalD9SignRaw + 12) % 12) + 1
-                                                withAnimation(.easeInOut(duration: 0.2)) {
-                                                    d9RotatedHouse = newRotatedHouse
-                                                }
-                                            }
-                                        },
-                                        onResetToNatalLagna: {
-                                            withAnimation(.easeInOut(duration: 0.2)) {
-                                                d9RotatedHouse = 1
-                                            }
-                                        }
-                                    )
-                                } else {
-                                    SouthIndianChartCanvas(
-                                        lagnaRasi: effD9Lagna,
-                                        planetRasis: d9.planetRasis,
-                                        extraRasiLabels: d9UpagrahaRasiLabels(d9: d9),
-                                        isRotated: isD9Rotated,
-                                        onShowChartFromRasi: { rasi in
-                                            let natalD9SignRaw = d9.lagnaRasi.rawValue
-                                            let newRotatedHouse = ((rasi.rawValue - natalD9SignRaw + 12) % 12) + 1
-                                            withAnimation(.easeInOut(duration: 0.2)) {
-                                                d9RotatedHouse = newRotatedHouse
-                                            }
-                                        },
-                                        onResetToNatalLagna: {
-                                            withAnimation(.easeInOut(duration: 0.2)) {
-                                                d9RotatedHouse = 1
-                                            }
-                                        }
-                                    )
-                                }
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
-                    }
-                }
-
-                // Lifespan Mahadasha Timeline Bar
-                VStack(alignment: .leading, spacing: DesignSpacing.xSmall) {
-                    HStack {
-                        Text("Vimshottari Mahadasha Timeline")
-                            .designTextStyle(.section)
-                        Spacer()
-                        Text("Focus: \(chart.currentDashaVector)")
-                            .designTextStyle(.caption, monospacedDigits: true)
-                            .foregroundStyle(DesignColor.accent)
-                    }
-
-                    // Continuous horizontal timeline strip
-                    HStack(spacing: 2) {
-                        ForEach(chart.dashaNodes) { node in
-                            VStack(spacing: 2) {
-                                RoundedRectangle(cornerRadius: 3)
-                                    .fill(node.statusText == "Focused" ? DesignColor.accent : DesignColor.groupedBackground)
-                                    .frame(height: 24)
-                                    .overlay(
-                                        Text("\(node.lord.shortAbbreviation) (\(node.formattedDuration.prefix(3)))")
-                                            .font(.system(size: 10, weight: .medium))
-                                            .foregroundColor(node.statusText == "Focused" ? .white : DesignColor.primaryText)
-                                    )
-                                Text(node.startDate, format: .dateTime.year())
-                                    .font(.system(size: 9).monospaced())
-                                    .foregroundColor(DesignColor.secondaryText)
-                            }
-                            .frame(maxWidth: .infinity)
-                        }
-                    }
-                    .padding(DesignSpacing.small)
-                    .background(DesignColor.background)
-                    .clipShape(RoundedRectangle(cornerRadius: 6))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 6)
-                            .stroke(DesignColor.separator, lineWidth: 1)
-                    )
-                }
-
-                // Planetary Positions Table
-                VStack(alignment: .leading, spacing: DesignSpacing.xSmall) {
-                    Text("Planetary Positions & Dignities")
-                        .designTextStyle(.section)
-
-                    Table(chart.planets) {
-                        TableColumn("Graha") { p in
-                            HStack(spacing: 4) {
-                                Text(p.graha.astronomicalGlyph)
-                                Text(p.graha.sanskritName)
-                                    .fontWeight(.medium)
-                            }
-                            .designTextStyle(.body)
-                        }
-                        .width(min: 110, ideal: 130)
-
-                        TableColumn("Rasi") { p in
-                            Text("\(p.rasi.sanskritName) (\(p.rasi.englishName))")
-                                .designTextStyle(.body)
-                        }
-                        .width(min: 120, ideal: 140)
-
-                        TableColumn("Longitude") { p in
-                            Text(p.formattedDMS)
-                                .designTextStyle(.body, monospacedDigits: true)
-                        }
-                        .width(min: 90, ideal: 105)
-
-                        TableColumn("Nakshatra & Pada") { p in
-                            Text("\(p.nakshatra.name) - \(p.pada)")
-                                .designTextStyle(.body)
-                        }
-                        .width(min: 120, ideal: 140)
-
-                        TableColumn(isD1Rotated ? "Bhava (Nat)" : "Bhava") { p in
-                            let currentBhava = ((p.rasi.rawValue - effectiveD1LagnaRasi.rawValue + 12) % 12) + 1
-                            HStack(spacing: 4) {
-                                Text("\(currentBhava)")
-                                    .fontWeight(isD1Rotated ? .semibold : .regular)
-                                    .foregroundColor(isD1Rotated ? DesignColor.accent : DesignColor.primaryText)
-                                if isD1Rotated {
-                                    Text("(\(p.bhava))")
-                                        .font(.caption2)
-                                        .foregroundColor(DesignColor.secondaryText)
-                                }
-                            }
-                            .designTextStyle(.body, monospacedDigits: true)
-                        }
-                        .width(min: 50, ideal: isD1Rotated ? 75 : 50)
-
-                        TableColumn("Dignity") { p in
-                            HStack(spacing: 4) {
-                                Text(p.dignity.rawValue)
-                                if !p.dignity.glyph.isEmpty {
-                                    Text(p.dignity.glyph)
-                                        .fontWeight(.bold)
-                                        .foregroundColor(p.dignity == .exalted ? DesignColor.accent : DesignColor.secondaryText)
-                                }
-                            }
-                            .designTextStyle(.body)
-                        }
-                        .width(min: 100, ideal: 110)
-
-                        TableColumn("Speed (°/day)") { p in
-                            Text(p.speedDegPerDay.map { String(format: "%.2f", $0) } ?? "—")
-                                .designTextStyle(.body, monospacedDigits: true)
-                                .foregroundColor(p.isRetrograde ? DesignColor.accent : DesignColor.primaryText)
-                        }
-                        .width(min: 80, ideal: 95)
-                    }
-                    .frame(height: 260)
-                    .clipShape(RoundedRectangle(cornerRadius: 6))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 6)
-                            .stroke(DesignColor.separator, lineWidth: 1)
-                    )
-
-                    UpagrahaTileRow(upagrahas: chart.upagrahas)
-                }
+            VStack(alignment: .leading, spacing: DesignSpacing.large) {
+                metricStrip
+                kundaliSection
+                positionsSection
+                OverviewDashaStrip(nodes: chart.dashaNodes, activeVector: chart.currentDashaVector)
+                OverviewStrengthStrip(shadbala: chart.shadbala)
             }
             .padding(DesignSpacing.medium)
         }
         .background(DesignColor.background)
     }
 
-    private var moonPosition: PlanetPosition? {
-        chart.planets.first(where: { $0.graha == .moon })
+    // MARK: - Metrics
+
+    private var moon: PlanetPosition? {
+        chart.planets.first { $0.graha == .moon }
+    }
+
+    private var metricStrip: some View {
+        HStack(spacing: DesignSpacing.small) {
+            MetricTile(
+                title: "Lagna (Ascendant)",
+                value: "\(chart.lagnaPosition.rasi.sanskritName) \(chart.lagnaPosition.formattedDMS)",
+                subtitle: "\(chart.lagnaPosition.nakshatra.name) pada \(chart.lagnaPosition.pada) · lord \(chart.lagnaPosition.rasi.lord.sanskritName)",
+                badge: "1st bhava"
+            )
+
+            MetricTile(
+                title: "Janma Nakshatra (Moon)",
+                value: moon?.nakshatra.name ?? "—",
+                subtitle: moon.map { "\($0.rasi.sanskritName) \($0.formattedDMS) · lord \($0.nakshatra.lord.sanskritName)" } ?? "",
+                badge: moon.map { "Pada \($0.pada)" }
+            )
+
+            MetricTile(
+                title: "Running Vimshottari Period",
+                value: chart.currentDashaVector.components(separatedBy: "›").prefix(2).joined(separator: "› "),
+                subtitle: chart.currentDashaVector,
+                badge: "MD › AD",
+                isAuspicious: true
+            )
+
+            MetricTile(
+                title: "Sunrise – Sunset",
+                value: sunriseSunsetValue,
+                subtitle: [chart.vara?.name, timezoneAbbreviation].compactMap { $0 }.joined(separator: " · "),
+                badge: chart.vara?.sanskritName
+            )
+        }
     }
 
     private var sunriseSunsetValue: String {
@@ -409,18 +68,117 @@ struct OverviewView: View {
         return "\(sunrise) – \(sunset)"
     }
 
-    /// Gulika and Maandi labels keyed by the house they occupy from the effective D-1 lagna.
-    private var d1UpagrahaHouseLabels: [Int: [String]] {
-        var map: [Int: [String]] = [:]
-        let effLagnaRaw = effectiveD1LagnaRasi.rawValue
-        for upagraha in chart.upagrahas ?? [] {
-            let house = ((upagraha.rasi.rawValue - effLagnaRaw + 12) % 12) + 1
-            map[house, default: []].append(upagraha.kind.shortAbbreviation)
+    private var timezoneAbbreviation: String? {
+        chart.timezoneString.components(separatedBy: " ").first
+    }
+
+    // MARK: - Kundalis
+
+    private var d9: VargaChart? {
+        chart.vargas.first { $0.division == .d9 }
+    }
+
+    private var kundaliSection: some View {
+        VStack(alignment: .leading, spacing: DesignSpacing.small) {
+            HStack(alignment: .firstTextBaseline) {
+                Text("Kundali")
+                    .designTextStyle(.section)
+                Text("Right-click a house to view the chart from it (bhavat bhavam).")
+                    .designTextStyle(.caption)
+                    .foregroundStyle(DesignColor.secondaryText)
+                Spacer()
+                Picker("Style", selection: $style) {
+                    ForEach(KundaliStyle.allCases) { style in
+                        Text(style.title).tag(style)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .controlSize(.small)
+                .labelsHidden()
+                .frame(width: 220)
+            }
+
+            if d1Rotation.isRotated || d9Rotation.isRotated {
+                rotationBanner
+            }
+
+            HStack(alignment: .top, spacing: DesignSpacing.medium) {
+                KundaliPanel(
+                    title: "D-1 Rasi",
+                    natalLagna: chart.lagnaPosition.rasi,
+                    planetRasis: d1PlanetRasis,
+                    retrogradeGrahas: retrogradeGrahas,
+                    extraLabels: d1ExtraLabels,
+                    style: style,
+                    rotation: $d1Rotation
+                )
+
+                if let d9 {
+                    KundaliPanel(
+                        title: "D-9 Navamsha",
+                        natalLagna: d9.lagnaRasi,
+                        planetRasis: d9.planetRasis,
+                        retrogradeGrahas: retrogradeGrahas,
+                        extraLabels: extraLabels(from: d9.upagrahaRasis),
+                        style: style,
+                        rotation: $d9Rotation
+                    )
+                }
+            }
+        }
+    }
+
+    private var rotationBanner: some View {
+        HStack(spacing: DesignSpacing.small) {
+            Image(systemName: "arrow.triangle.2.circlepath")
+                .foregroundStyle(DesignColor.accent)
+            Text(rotationDescription)
+                .font(.caption.weight(.medium))
+                .foregroundStyle(DesignColor.primaryText)
+            Spacer()
+            Button("Reset to natal") {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    d1Rotation.reset()
+                    d9Rotation.reset()
+                }
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.mini)
+        }
+        .padding(.horizontal, DesignSpacing.small)
+        .padding(.vertical, 6)
+        .background(DesignColor.accent.opacity(0.08))
+        .clipShape(RoundedRectangle(cornerRadius: 6))
+        .overlay(
+            RoundedRectangle(cornerRadius: 6)
+                .stroke(DesignColor.accent.opacity(0.25), lineWidth: 1)
+        )
+    }
+
+    private var rotationDescription: String {
+        var parts: [String] = []
+        if d1Rotation.isRotated {
+            parts.append("D-1 seen from natal house \(d1Rotation.house) (\(effectiveD1Lagna.sanskritName))")
+        }
+        if d9Rotation.isRotated, let d9 {
+            parts.append("D-9 seen from house \(d9Rotation.house) (\(d9Rotation.effectiveLagna(natal: d9.lagnaRasi).sanskritName))")
+        }
+        return "Bhavat bhavam: " + parts.joined(separator: " · ")
+    }
+
+    private var d1PlanetRasis: [Graha: Rasi] {
+        var map: [Graha: Rasi] = [:]
+        for planet in chart.planets {
+            map[planet.graha] = planet.rasi
         }
         return map
     }
 
-    private var d1UpagrahaRasiLabels: [Rasi: [String]] {
+    private var retrogradeGrahas: Set<Graha> {
+        Set(chart.planets.filter(\.isRetrograde).map(\.graha))
+    }
+
+    private var d1ExtraLabels: [Rasi: [String]] {
         var map: [Rasi: [String]] = [:]
         for upagraha in chart.upagrahas ?? [] {
             map[upagraha.rasi, default: []].append(upagraha.kind.shortAbbreviation)
@@ -428,147 +186,112 @@ struct OverviewView: View {
         return map
     }
 
-    private func d9UpagrahaHouseLabels(d9: VargaChart) -> [Int: [String]] {
-        var map: [Int: [String]] = [:]
-        let effLagnaRaw = effectiveD9LagnaRasi.rawValue
-        for kind in UpagrahaKind.allCases {
-            guard let rasi = d9.upagrahaRasis?[kind] else { continue }
-            let house = ((rasi.rawValue - effLagnaRaw + 12) % 12) + 1
-            map[house, default: []].append(kind.shortAbbreviation)
-        }
-        return map
-    }
-
-    private func d9UpagrahaRasiLabels(d9: VargaChart) -> [Rasi: [String]] {
+    private func extraLabels(from rasis: [UpagrahaKind: Rasi]?) -> [Rasi: [String]] {
         var map: [Rasi: [String]] = [:]
         for kind in UpagrahaKind.allCases {
-            guard let rasi = d9.upagrahaRasis?[kind] else { continue }
+            guard let rasi = rasis?[kind] else { continue }
             map[rasi, default: []].append(kind.shortAbbreviation)
         }
         return map
     }
 
-    private var isD1Rotated: Bool {
-        d1RotatedHouse != 1
+    // MARK: - Positions
+
+    private var effectiveD1Lagna: Rasi {
+        d1Rotation.effectiveLagna(natal: chart.lagnaPosition.rasi)
     }
 
-    private var isD9Rotated: Bool {
-        d9RotatedHouse != 1
-    }
-
-    private var effectiveD1LagnaRasi: Rasi {
-        let raw = ((chart.lagnaPosition.rasi.rawValue - 1 + (d1RotatedHouse - 1)) % 12) + 1
-        return Rasi(rawValue: raw) ?? chart.lagnaPosition.rasi
-    }
-
-    private var effectiveD1HouseRasis: [Int: Rasi] {
-        houseRasis(lagna: effectiveD1LagnaRasi)
-    }
-
-    private var effectiveD1HousePlanets: [Int: [PlanetPosition]] {
-        var map: [Int: [PlanetPosition]] = [:]
-        let effLagnaRaw = effectiveD1LagnaRasi.rawValue
-        for p in chart.planets {
-            let rotatedBhava = ((p.rasi.rawValue - effLagnaRaw + 12) % 12) + 1
-            let rotatedP = PlanetPosition(
-                graha: p.graha,
-                rasi: p.rasi,
-                longitudeInRasi: p.longitudeInRasi,
-                formattedDMS: p.formattedDMS,
-                nakshatra: p.nakshatra,
-                pada: p.pada,
-                isRetrograde: p.isRetrograde,
-                isCombust: p.isCombust,
-                dignity: p.dignity,
-                bhava: rotatedBhava,
-                charaKaraka: p.charaKaraka,
-                speedDegPerDay: p.speedDegPerDay
-            )
-            map[rotatedBhava, default: []].append(rotatedP)
-        }
-        return map
-    }
-
-    private var effectiveD9LagnaRasi: Rasi {
-        guard let d9 = chart.vargas.first(where: { $0.division == .d9 }) else {
-            return chart.lagnaPosition.rasi
-        }
-        let raw = ((d9.lagnaRasi.rawValue - 1 + (d9RotatedHouse - 1)) % 12) + 1
-        return Rasi(rawValue: raw) ?? d9.lagnaRasi
-    }
-
-    private func effectiveD9HouseRasis(d9: VargaChart) -> [Int: Rasi] {
-        houseRasis(lagna: effectiveD9LagnaRasi)
-    }
-
-    private func effectiveD9HousePlanets(d9: VargaChart) -> [Int: [PlanetPosition]] {
-        var map: [Int: [PlanetPosition]] = [:]
-        let effLagnaRaw = effectiveD9LagnaRasi.rawValue
-        for (graha, rasi) in d9.planetRasis {
-            let house = ((rasi.rawValue - effLagnaRaw + 12) % 12) + 1
-            let fakePos = PlanetPosition(
-                graha: graha,
-                rasi: rasi,
-                longitudeInRasi: 0,
-                formattedDMS: "",
-                nakshatra: .ashwini,
-                pada: 1,
-                isRetrograde: false,
-                isCombust: false,
-                dignity: .neutral,
-                bhava: house,
-                charaKaraka: nil,
-                speedDegPerDay: nil
-            )
-            map[house, default: []].append(fakePos)
-        }
-        return map
-    }
-
-    private func houseRasis(lagna: Rasi) -> [Int: Rasi] {
-        var map: [Int: Rasi] = [:]
-        for h in 1...12 {
-            let rasiIndex = ((lagna.rawValue - 1 + (h - 1)) % 12) + 1
-            map[h] = Rasi(rawValue: rasiIndex)
-        }
-        return map
-    }
-}
-
-/// One metric tile per upagraha (Gulika, Maandi) in the D-1 chart, or a placeholder
-/// when the chart was computed before upagrahas existed.
-private struct UpagrahaTileRow: View {
-    let upagrahas: [UpagrahaPosition]?
-
-    var body: some View {
+    private var positionsSection: some View {
         VStack(alignment: .leading, spacing: DesignSpacing.xSmall) {
-            Text("Upagrahas")
-                .designTextStyle(.caption)
-                .foregroundStyle(DesignColor.secondaryText)
+            HStack(alignment: .firstTextBaseline) {
+                Text("Positions")
+                    .designTextStyle(.section)
+                Spacer()
+                Text(d1Rotation.isRotated
+                    ? "Bhava counted from \(effectiveD1Lagna.sanskritName); natal bhava in brackets"
+                    : "Bhava counted from the Lagna sign · R retrograde · C combust")
+                    .designTextStyle(.caption)
+                    .foregroundStyle(DesignColor.secondaryText)
+            }
 
-            HStack(spacing: DesignSpacing.small) {
-                ForEach(UpagrahaKind.allCases) { kind in
-                    tile(for: kind)
-                }
+            OverviewPositionsGrid(rows: positionRows, isRotated: d1Rotation.isRotated)
+
+            if chart.upagrahas == nil {
+                Text("Gulika and Maandi are not stored for this chart. Use Recalculate (⇧⌘R) to add them.")
+                    .designTextStyle(.caption)
+                    .foregroundStyle(DesignColor.secondaryText)
             }
         }
     }
 
-    @ViewBuilder
-    private func tile(for kind: UpagrahaKind) -> some View {
-        if let position = upagrahas?.first(where: { $0.kind == kind }) {
-            MetricTile(
-                title: "\(kind.rawValue) (\(kind.shortAbbreviation))",
-                value: "\(position.rasi.sanskritName) \(position.formattedDMS)",
-                subtitle: "\(position.nakshatra.name) Pada \(position.pada)",
-                badge: "Bhava \(position.bhava)"
+    private var positionRows: [OverviewPositionRow] {
+        let natalLagna = chart.lagnaPosition.rasi
+        let lagna = effectiveD1Lagna
+        let rotated = d1Rotation.isRotated
+        var rows: [OverviewPositionRow] = []
+
+        let ascendant = chart.lagnaPosition
+        rows.append(
+            OverviewPositionRow(
+                id: "lagna",
+                glyph: "As",
+                name: "Lagna",
+                rasi: ascendant.rasi,
+                formattedDMS: ascendant.formattedDMS,
+                nakshatra: ascendant.nakshatra,
+                pada: ascendant.pada,
+                bhava: lagna.count(to: ascendant.rasi),
+                natalBhava: rotated ? 1 : nil,
+                dignity: nil,
+                isRetrograde: false,
+                isCombust: false,
+                speedDegPerDay: nil,
+                isLagna: true
             )
-        } else {
-            MetricTile(
-                title: "\(kind.rawValue) (\(kind.shortAbbreviation))",
-                value: "—",
-                subtitle: "Not computed for this chart"
+        )
+
+        for planet in chart.planets {
+            rows.append(
+                OverviewPositionRow(
+                    id: planet.graha.rawValue,
+                    glyph: planet.graha.astronomicalGlyph,
+                    name: planet.graha.sanskritName,
+                    rasi: planet.rasi,
+                    formattedDMS: planet.formattedDMS,
+                    nakshatra: planet.nakshatra,
+                    pada: planet.pada,
+                    bhava: lagna.count(to: planet.rasi),
+                    natalBhava: rotated ? natalLagna.count(to: planet.rasi) : nil,
+                    dignity: planet.dignity,
+                    isRetrograde: planet.isRetrograde,
+                    isCombust: planet.isCombust,
+                    speedDegPerDay: planet.speedDegPerDay,
+                    isLagna: false
+                )
             )
         }
+
+        for upagraha in chart.upagrahas ?? [] {
+            rows.append(
+                OverviewPositionRow(
+                    id: upagraha.kind.rawValue,
+                    glyph: upagraha.kind.shortAbbreviation,
+                    name: upagraha.kind.rawValue,
+                    rasi: upagraha.rasi,
+                    formattedDMS: upagraha.formattedDMS,
+                    nakshatra: upagraha.nakshatra,
+                    pada: upagraha.pada,
+                    bhava: lagna.count(to: upagraha.rasi),
+                    natalBhava: rotated ? natalLagna.count(to: upagraha.rasi) : nil,
+                    dignity: nil,
+                    isRetrograde: false,
+                    isCombust: false,
+                    speedDegPerDay: nil,
+                    isLagna: false
+                )
+            )
+        }
+
+        return rows
     }
 }

@@ -5,6 +5,11 @@ struct NewChartSheet: View {
     @Environment(\.dismiss) private var dismiss
     var onSave: ((ChartDetail) -> Void)?
 
+    // Calculation defaults chosen in Settings.
+    @AppStorage("defaultAyanamsa") private var defaultAyanamsa = "Lahiri (Chitra Paksha)"
+    @AppStorage("defaultLunarNode") private var defaultLunarNode = "True Node"
+    @AppStorage("defaultHouseSystem") private var defaultHouseSystem = "Whole Sign"
+
     @State private var name: String = ""
     @State private var gender: String = "Male"
     @State private var calendarSystem: String = "A.D. (Gregorian)"
@@ -243,9 +248,10 @@ struct NewChartSheet: View {
                     VStack(alignment: .leading, spacing: DesignSpacing.medium) {
                         SectionHeader(title: "Chart Display")
 
-                        Text("Traditional Lahiri ayanamsa, true nodes, and whole-sign bhavas are used for every new chart.")
+                        Text("\(selectedAyanamsaName) ayanamsa, \(selectedNodeName.lowercased()), and \(selectedHouseSystem.displayName.lowercased()) bhavas will be used. Change these defaults in Settings › Calculations.")
                             .designTextStyle(.caption)
                             .foregroundStyle(DesignColor.secondaryText)
+                            .fixedSize(horizontal: false, vertical: true)
 
                         VStack(alignment: .leading, spacing: DesignSpacing.xSmall) {
                             Text("Chart Display Style")
@@ -320,7 +326,36 @@ struct NewChartSheet: View {
         let day = calendar.component(.day, from: birthDate)
         let bsMonths = ["Baisakh", "Jestha", "Ashadh", "Shrawan", "Bhadra", "Ashwin", "Kartik", "Mangsir", "Poush", "Magh", "Falgun", "Chaitra"]
         let monthName = bsMonths[(month + 8) % 12]
-        return "\(day) \(monthName) \(year) B.S."
+        // Year and month are offset only; verified Bikram Sambat tables are not wired in yet.
+        return "\(day) \(monthName) \(year) B.S. (approx.)"
+    }
+
+    /// The ephemeris ayanamsa for the Settings default; unknown names fall back to Lahiri.
+    private var selectedAyanamsa: Ayanamsa {
+        let name = defaultAyanamsa.lowercased()
+        if name.contains("raman") { return .raman }
+        if name.contains("krishnamurti") || name.contains("kp") { return .krishnamurti }
+        return .lahiri
+    }
+
+    private var selectedAyanamsaName: String {
+        switch selectedAyanamsa {
+        case .raman: return "Raman"
+        case .krishnamurti: return "Krishnamurti (KP)"
+        case .lahiri: return "Lahiri (Chitra Paksha)"
+        }
+    }
+
+    private var selectedNodeCalculation: ChartCalculationInput.NodeCalculation {
+        defaultLunarNode.lowercased().contains("mean") ? .meanNode : .trueNode
+    }
+
+    private var selectedNodeName: String {
+        selectedNodeCalculation == .meanNode ? "Mean Node" : "True Node"
+    }
+
+    private var selectedHouseSystem: HouseSystem {
+        HouseSystem(displayName: defaultHouseSystem) ?? .wholeSign
     }
 
     private var dayOfWeek: String {
@@ -338,9 +373,9 @@ struct NewChartSheet: View {
             birthDate: birthDate, birthTimeString: timeStr, calendarSystem: calendarSystem,
             bikramSambatDateString: bikramSambatEquivalent, locationName: cityName, latitude: latitude,
             longitude: longitude, timezoneString: timezone, utcOffsetSeconds: timezoneOffsetSeconds,
-            ayanamsaName: "Traditional Lahiri", ayanamsa: .lahiri,
-            nodeCalculation: .trueNode,
-            houseSystem: .wholeSign,
+            ayanamsaName: selectedAyanamsaName, ayanamsa: selectedAyanamsa,
+            nodeCalculation: selectedNodeCalculation,
+            houseSystem: selectedHouseSystem,
             notes: notes.isEmpty ? [] : [
                 ChartNote(id: UUID(), date: Date(), category: "Initial Intake", content: notes, tags: ["#Intake"])
             ]

@@ -439,6 +439,11 @@ struct ShadbalaBreakdown: Identifiable, Hashable, Sendable, Codable {
     let totalRupas: Double
     let requiredRupas: Double
     let rank: Int
+    /// Every sub-component (Uccha, Paksha, Hora, ...) in virupas. Nil for charts
+    /// saved before the Shadbala calculator existed.
+    var components: ShadbalaComponents? = nil
+
+    var requiredVirupas: Double { requiredRupas * 60 }
 
     var percentageOfRequired: Double {
         guard requiredRupas > 0 else { return 0 }
@@ -638,6 +643,19 @@ struct ChartDetail: Identifiable, Hashable, Sendable, Codable {
     var yoginiDasha: DashaTimeline? = nil
     var charaDasha: DashaTimeline? = nil
     var lagnamsaDasha: DashaTimeline? = nil
+    /// Bhava Bala of the twelve houses (BPHS Ch. 28). Nil until the chart is (re)calculated.
+    var bhavaBala: [BhavaBala]? = nil
+    /// Compound (panchadha) relationship of every planet with every other planet, Sun through Saturn.
+    var planetaryRelations: [Graha: [Graha: PlanetaryRelation]]? = nil
+    /// Offset of the stored local birth time from UTC, so the chart can be recalculated exactly.
+    var utcOffsetSeconds: TimeInterval? = nil
+    /// Name of the house system the cusps were computed with ("Whole Sign", "Placidus", ...).
+    var houseSystemName: String? = nil
+
+    /// True when Shadbala and Ashtakavarga were produced by the calculation engine.
+    var hasStrengthData: Bool {
+        !shadbala.isEmpty && !ashtakavarga.sarvashtakavarga.isEmpty
+    }
 
     /// Timelines of every alternative dasha system that has been computed, in menu order.
     var alternativeDashaTimelines: [DashaTimeline] {

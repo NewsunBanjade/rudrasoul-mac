@@ -25,11 +25,14 @@ struct ChartCalculationService: Sendable {
         var planets = try await planetPositions(
             julianDay: julianDay, settings: settings, nodeCalculation: input.nodeCalculation, cusps: houses.cusps
         )
+        // Sign dignities and combustion depend on every planet's sign, so they follow the raw positions.
+        planets = GrahaDignityCalculator.applyingDignities(to: planets)
         guard let moon = planets.first(where: { $0.graha == .moon }) else {
             throw ChartCalculationError.missingMoonPosition
         }
         let ascendant = houses.ascendant.normalizedLongitude360
         let lagna = makePosition(graha: .ascendant, longitude: ascendant, speed: nil, bhava: 1)
+        let ayanamsaDegrees = await ephemeris.ayanamsaValue(at: julianDay, ayanamsa: input.ayanamsa ?? .lahiri)
 
         // Day of birth: sunrise, sunset, vara, and everything that depends on them.
         let day = await dayContext(birth: utcDate, coordinates: coordinates, utcOffsetSeconds: input.utcOffsetSeconds)
@@ -61,7 +64,21 @@ struct ChartCalculationService: Sendable {
             lagnamsaRasi: lagnamsaRasi, planets: planets, birthDate: utcDate
         )
 
-        let ayanamsaDegrees = await ephemeris.ayanamsaValue(at: julianDay, ayanamsa: input.ayanamsa ?? .lahiri)
+        // Strengths: Ashtakavarga needs only signs; Shadbala needs the angles, the day and the ayanamsa;
+        // Bhava Bala needs the cusps and the finished Shadbala.
+        let ashtakavarga = AshtakavargaCalculator.calculate(lagnaRasi: lagna.rasi, planets: planets)
+        let shadbala = ShadbalaCalculator.calculate(
+            ShadbalaInput(
+                planets: planets,
+                lagnaLongitude: ascendant,
+                midheavenLongitude: houses.midheaven.normalizedLongitude360,
+                ayanamsaDegrees: ayanamsaDegrees,
+                birth: utcDate,
+                geographicLongitude: coordinates.longitude,
+                day: day
+            )
+        )
+        let bhavaBala = BhavaBalaCalculator.calculate(cusps: houses.cusps, shadbala: shadbala, planets: planets)
 
         var detail = ChartDetail(
             id: input.id,
@@ -84,8 +101,8 @@ struct ChartCalculationService: Sendable {
             planets: planets,
             bhavas: bhavas(cusps: houses.cusps, planets: planets),
             vargas: VargaCalculator.charts(lagnaLongitude: ascendant, planets: planets, upagrahas: upagrahas),
-            shadbala: [],
-            ashtakavarga: AshtakavargaData(sarvashtakavarga: [:], bhinnashtakavarga: [:]),
+            shadbala: shadbala,
+            ashtakavarga: ashtakavarga,
             dashaNodes: vimshottari.nodes,
             currentDashaVector: vimshottari.currentDashaVector,
             yogas: [],
@@ -103,12 +120,18 @@ struct ChartCalculationService: Sendable {
         detail.yoginiDasha = yogini
         detail.charaDasha = chara
         detail.lagnamsaDasha = lagnamsa
+        detail.bhavaBala = bhavaBala
+        detail.planetaryRelations = GrahaDignityCalculator.compoundRelations(planets: planets)
+        detail.utcOffsetSeconds = input.utcOffsetSeconds
+        detail.houseSystemName = input.houseSystem.displayName
         return detail
     }
 
     // MARK: - Positions
 
-    private func planetPositions(
+    /// Sidereal positions of the nine grahas at an instant. `cusps` may be empty, in which
+    /// case every house number is 1 (transits do not need houses).
+    func planetPositions(
         julianDay: JulianDay,
         settings: EphemerisSettings,
         nodeCalculation: ChartCalculationInput.NodeCalculation,
@@ -264,7 +287,31 @@ private extension Calendar {
     }
 }
 
-private extension String {
+extension HouseSystem {
+    /// The name stored with a chart and shown in the settings.
+    var displayName: String {
+        switch self {
+        case .placidus: "Placidus"
+        case .koch: "Koch"
+        case .equal: "Equal"
+        case .wholeSign: "Whole Sign"
+        }
+    }
+
+    /// The system named by `displayName`; nil for unknown or unsupported names.
+    init?(displayName: String) {
+        switch displayName.lowercased() {
+        case "placidus": self = .placidus
+        case "koch": self = .koch
+        case "equal", "equal bhava": self = .equal
+        case "whole sign", "whole-sign": self = .wholeSign
+        default: return nil
+        }
+    }
+}
+
+extension String {
+    /// Parses "27° 42' 52\" N", "27.7143" or "-27.7" into signed decimal degrees.
     var decimalDegrees: Double {
         get throws {
             let negative = contains("S") || contains("W") || trimmingCharacters(in: .whitespaces).hasPrefix("-")
