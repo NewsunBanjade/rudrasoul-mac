@@ -42,6 +42,16 @@ factual, and current; do not use it as a changelog.
   - Schema V1 uses indexed columns for fast astrological query filtering (`lagna_rasi`, `moon_nakshatra`, `current_dasha`, `engine_version`).
   - SQLite database supports online atomic backup/restore for import and export.
 - Testing rule: Do NOT run UI tests (`rudrasoul-jyotishUITests`). Run only unit tests (`-only-testing:rudrasoul-jyotishTests`) or build (`xcodebuild build`).
+- Calculation modules (all pure, under `Services/`): `VimshottariDashaCalculator` (3 stored levels, Sookshma/Prana on demand via `subPeriods`),
+  `YoginiDashaCalculator`, `CharaDashaCalculator` (Chara + Lagnamsa), `UpagrahaCalculator` (Gulika/Maandi timing),
+  `JaiminiCalculator` (+`JaiminiSpecialLagnas`: karakas, arudha padas with exceptions OFF by default, Indu/Sree/Bhava/Hora/Ghati/Varnada lagnas),
+  `ShashtiamsaTable` (D-60 deities, equal 0°30' parts, reversed in even signs), `KotaChakraCalculator`, `SarvatobhadraCalculator`,
+  and the shared longitude helpers in `JyotishLongitude.swift`.
+- `EphemerisKit` exposes `riseSetTime(of:event:after:coordinates:source:)` (Hindu rising: disc centre, no refraction) and `ayanamsaValue(at:ayanamsa:)`;
+  `ChartCalculationService` uses them for sunrise/sunset, vara, and the ayanamsa DMS shown in the header.
+- `ChartDetail` is stored whole as JSON (`raw_chart_json`); every field added after V1 is optional with a nil default so older rows still decode.
+  Views must tolerate nil (`upagrahas`, `jaimini`, `yoginiDasha`, `charaDasha`, `lagnamsaDasha`, `kota.cells`, `vargas[].upagrahaRasis`).
+- The sidebar has a `Jaimini` analysis page; the Dasha page has a system picker (Vimshottari, Yogini, Chara, Lagnamsa) and a target-date stepper.
 
 ## Implementation constraints
 

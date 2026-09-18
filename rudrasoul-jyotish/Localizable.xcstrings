@@ -390,7 +390,18 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dasha (Vimshottari)"
+            "value" : "Dasha"
+          }
+        }
+      }
+    },
+    "chart.sidebar.jaimini" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jaimini"
           }
         }
       }

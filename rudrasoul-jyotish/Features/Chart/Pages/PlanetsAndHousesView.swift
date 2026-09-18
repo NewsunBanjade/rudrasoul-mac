@@ -23,11 +23,73 @@ struct PlanetsAndHousesView: View {
 
             if viewMode == 0 {
                 planetsTable
+                upagrahaSection
             } else {
                 bhavasTable
             }
         }
         .background(DesignColor.background)
+    }
+
+    /// Hours and minutes of the rising instant, always shown in UTC because
+    /// `UpagrahaPosition.risingDate` is a UTC instant.
+    private var risingTimeStyle: Date.FormatStyle {
+        Date.FormatStyle(timeZone: .gmt).hour().minute()
+    }
+
+    private var upagrahaSection: some View {
+        VStack(alignment: .leading, spacing: DesignSpacing.small) {
+            Text("Upagrahas")
+                .designTextStyle(.section)
+
+            if let upagrahas = chart.upagrahas, !upagrahas.isEmpty {
+                upagrahaGrid(upagrahas)
+            } else {
+                Text("Gulika and Maandi are not available for this chart.")
+                    .designTextStyle(.caption)
+                    .foregroundStyle(DesignColor.secondaryText)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(DesignSpacing.medium)
+        .overlay(alignment: .top) { Divider() }
+    }
+
+    private func upagrahaGrid(_ upagrahas: [UpagrahaPosition]) -> some View {
+        Grid(alignment: .leading, horizontalSpacing: DesignSpacing.medium, verticalSpacing: DesignSpacing.xSmall) {
+            GridRow {
+                upagrahaHeader("Point")
+                upagrahaHeader("Rasi")
+                upagrahaHeader("Longitude")
+                upagrahaHeader("Nakshatra (Pada)")
+                upagrahaHeader("Bhava")
+                upagrahaHeader("Rises (UTC)")
+            }
+
+            ForEach(upagrahas) { u in
+                GridRow {
+                    Text(u.kind.rawValue)
+                        .designTextStyle(.body)
+                        .fontWeight(.medium)
+                    Text("\(u.rasi.sanskritName) (\(u.rasi.englishName))")
+                        .designTextStyle(.body)
+                    Text(u.formattedDMS)
+                        .designTextStyle(.body, monospacedDigits: true)
+                    Text("\(u.nakshatra.name) - \(u.pada)")
+                        .designTextStyle(.body, monospacedDigits: true)
+                    Text("\(u.bhava)")
+                        .designTextStyle(.body, monospacedDigits: true)
+                    Text(u.risingDate, format: risingTimeStyle)
+                        .designTextStyle(.body, monospacedDigits: true)
+                }
+            }
+        }
+    }
+
+    private func upagrahaHeader(_ title: String) -> some View {
+        Text(title)
+            .designTextStyle(.caption)
+            .foregroundStyle(DesignColor.secondaryText)
     }
 
     private var planetsTable: some View {

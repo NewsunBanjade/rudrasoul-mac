@@ -29,6 +29,30 @@ double jp_swe_julian_day(int32_t year, int32_t month, int32_t day,
   return swe_julday(year, month, day, utc_hour, gregorian);
 }
 
+int32_t jp_swe_rise_trans(double julian_day_ut, int32_t body,
+                          int32_t ephemeris_flags, int32_t rsmi,
+                          double latitude, double longitude,
+                          double *result_jd, char *error,
+                          size_t error_capacity) {
+  char swiss_error[AS_MAXCH] = {0};
+  double geopos[3] = {longitude, latitude, 0.0};
+  double tret[10] = {0};
+  int32_t code = swe_rise_trans(julian_day_ut, body, NULL, ephemeris_flags,
+                                rsmi, geopos, 0.0, 0.0, tret, swiss_error);
+  if (result_jd != NULL) {
+    *result_jd = tret[0];
+  }
+  if (error != NULL && error_capacity > 0) {
+    strncpy(error, swiss_error, error_capacity - 1);
+    error[error_capacity - 1] = '\0';
+  }
+  return code;
+}
+
+double jp_swe_get_ayanamsa_ut(double julian_day_ut) {
+  return swe_get_ayanamsa_ut(julian_day_ut);
+}
+
 void jp_swe_set_ephemeris_path(const char *path) { swe_set_ephe_path((char *)path); }
 
 void jp_swe_set_sidereal_mode(int32_t mode) { swe_set_sid_mode(mode, 0, 0); }

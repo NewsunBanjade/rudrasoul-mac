@@ -5,6 +5,8 @@ import SwiftUI
 struct NorthIndianChartCanvas: View {
     let houseRasis: [Int: Rasi]
     let housePlanets: [Int: [PlanetPosition]]
+    /// Short labels drawn under the planets of a house, e.g. upagrahas ("Gk", "Md") or arudha padas ("AL").
+    var extraHouseLabels: [Int: [String]] = [:]
     var isRotated: Bool = false
     var onShowChartFromHouse: ((Int) -> Void)? = nil
     var onResetToNatalLagna: (() -> Void)? = nil
@@ -72,6 +74,18 @@ struct NorthIndianChartCanvas: View {
                             context.draw(
                                 context.resolve(planetText),
                                 at: CGPoint(x: center.x, y: center.y + 4),
+                                anchor: .center
+                            )
+                        }
+
+                        // Secondary points (upagrahas, padas) below the planets
+                        if let labels = extraHouseLabels[house], !labels.isEmpty {
+                            let extraText = Text(labels.joined(separator: " "))
+                                .font(.caption2.weight(.medium))
+                                .foregroundColor(DesignColor.secondaryText)
+                            context.draw(
+                                context.resolve(extraText),
+                                at: CGPoint(x: center.x, y: center.y + 18),
                                 anchor: .center
                             )
                         }

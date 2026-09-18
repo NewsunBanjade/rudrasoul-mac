@@ -6,20 +6,68 @@ import Foundation
 /// Shastra, chapters 6–7. Longitudes remain unrounded; only the resulting sign is
 /// retained because `VargaChart` is a sign-placement model.
 enum VargaCalculator {
-    static func charts(lagnaLongitude: Double, planets: [PlanetPosition]) -> [VargaChart] {
+    /// All sixteen Shodashavarga charts for a lagna, its planets, and (optionally) the
+    /// upagrahas Gulika and Maandi.
+    ///
+    /// Upagrahas are shadow points with a sidereal longitude, so they take a divisional
+    /// sign by exactly the same rule as a planet. `upagrahaRasis` is always populated
+    /// (empty when no upagrahas are given) so that views can distinguish "computed,
+    /// none present" from charts saved before upagrahas existed (`nil`).
+    /// For D-60 the Shashtiamsa deity of the lagna and of every planet is attached
+    /// (BPHS Ch. 6, vv. 33–41; see `ShashtiamsaTable`).
+    static func charts(
+        lagnaLongitude: Double,
+        planets: [PlanetPosition],
+        upagrahas: [UpagrahaPosition] = []
+    ) -> [VargaChart] {
         VargaDivision.allCases.map { division in
-            VargaChart(
-                division: division,
-                lagnaRasi: rasi(for: lagnaLongitude, division: division),
-                planetRasis: Dictionary(
-                    uniqueKeysWithValues: planets.map { planet in
-                        (planet.graha, rasi(for: absoluteLongitude(of: planet), division: division))
-                    }
-                )
-            )
+            chart(for: division, lagnaLongitude: lagnaLongitude, planets: planets, upagrahas: upagrahas)
         }
     }
 
+    private static func chart(
+        for division: VargaDivision,
+        lagnaLongitude: Double,
+        planets: [PlanetPosition],
+        upagrahas: [UpagrahaPosition]
+    ) -> VargaChart {
+        let planetRasis: [Graha: Rasi] = Dictionary(
+            planets.map { planet -> (Graha, Rasi) in
+                (planet.graha, rasi(for: planet.absoluteLongitude, division: division))
+            },
+            uniquingKeysWith: { _, last in last }
+        )
+        let upagrahaRasis: [UpagrahaKind: Rasi] = Dictionary(
+            upagrahas.map { upagraha -> (UpagrahaKind, Rasi) in
+                (upagraha.kind, rasi(for: upagraha.longitude, division: division))
+            },
+            uniquingKeysWith: { _, last in last }
+        )
+        var chart = VargaChart(
+            division: division,
+            lagnaRasi: rasi(for: lagnaLongitude, division: division),
+            planetRasis: planetRasis
+        )
+        chart.upagrahaRasis = upagrahaRasis
+        if division == .d60 {
+            chart.lagnaAmsaDetail = ShashtiamsaTable.detail(absoluteLongitude: lagnaLongitude)
+            let amsaDetails: [Graha: ShashtiamsaDetail] = Dictionary(
+                planets.map { planet -> (Graha, ShashtiamsaDetail) in
+                    (planet.graha, ShashtiamsaTable.detail(absoluteLongitude: planet.absoluteLongitude))
+                },
+                uniquingKeysWith: { _, last in last }
+            )
+            chart.planetAmsaDetails = amsaDetails
+        }
+        return chart
+    }
+
+    /// The divisional sign of an absolute sidereal longitude.
+    ///
+    /// D-60 (BPHS Ch. 6, v. 33): "ignore the sign position of a planet and take the
+    /// degrees it traversed in that sign; multiply by 2, divide by 12, add 1 to the
+    /// remainder" and count that many signs from the sign itself. `natalSign +
+    /// Int(longitudeInSign / 0.5)` taken modulo 12 is the same count.
     static func rasi(for longitude: Double, division: VargaDivision) -> Rasi {
         let normalized = longitude.normalizedVargaLongitude
         let natalSign = Int(normalized / 30)
@@ -59,10 +107,6 @@ enum VargaCalculator {
         case .d60:
             return rasi(at: natalSign + Int(longitudeInSign / 0.5))
         }
-    }
-
-    private static func absoluteLongitude(of position: PlanetPosition) -> Double {
-        Double(position.rasi.rawValue - 1) * 30 + position.longitudeInRasi
     }
 
     private static func rasi(at zeroBasedIndex: Int) -> Rasi {

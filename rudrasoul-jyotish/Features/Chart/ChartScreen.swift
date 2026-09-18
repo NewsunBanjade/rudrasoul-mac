@@ -145,7 +145,7 @@ private struct ChartWorkspace: View {
             } else if let chart = model.chartDetail {
                 ChartIdentityHeader(
                     title: LocalizedStringKey(chart.name),
-                    subtitle: LocalizedStringKey("\(chart.birthTimeString) · \(chart.locationName) · \(chart.ayanamsaName) (\(chart.ayanamsaValueDMS))")
+                    subtitle: LocalizedStringKey(headerSubtitle(for: chart))
                 )
 
                 destinationView(for: currentDestination, chart: chart)
@@ -178,6 +178,19 @@ private struct ChartWorkspace: View {
 
     private var isLibraryView: Bool {
         currentDestination == .allCharts || currentDestination == .recent
+    }
+
+    /// Birth time, place, and ayanamsa; the ayanamsa value is omitted when the chart predates its calculation.
+    private func headerSubtitle(for chart: ChartDetail) -> String {
+        var parts = [chart.birthTimeString, chart.locationName]
+        if let vara = chart.vara {
+            parts.append(vara.name)
+        }
+        let ayanamsa = chart.ayanamsaValueDMS.isEmpty
+            ? chart.ayanamsaName
+            : "\(chart.ayanamsaName) (\(chart.ayanamsaValueDMS))"
+        parts.append(ayanamsa)
+        return parts.joined(separator: " · ")
     }
 
     private var currentDestination: ChartScreenModel.Destination {
@@ -422,6 +435,8 @@ private struct ChartWorkspace: View {
             NakshatraView(chart: chart)
         case .yogasAndDoshas:
             YogasAndDoshasView(chart: chart)
+        case .jaimini:
+            JaiminiView(chart: chart)
         case .sarvatobhadra:
             SarvatobhadraView(chart: chart)
         case .kota:

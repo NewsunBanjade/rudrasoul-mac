@@ -5,6 +5,8 @@ import SwiftUI
 struct SouthIndianChartCanvas: View {
     let lagnaRasi: Rasi
     let planetRasis: [Graha: Rasi]
+    /// Short labels drawn under the planets of a sign, e.g. upagrahas ("Gk", "Md") or arudha padas ("AL").
+    var extraRasiLabels: [Rasi: [String]] = [:]
     var isRotated: Bool = false
     var onShowChartFromRasi: ((Rasi) -> Void)? = nil
     var onResetToNatalLagna: (() -> Void)? = nil
@@ -82,8 +84,8 @@ struct SouthIndianChartCanvas: View {
                                 anchor: .leading
                             )
 
-                            // Planets located in this sign
-                            let planetsInSign = planetRasis.filter { $0.value == rasi }.map { $0.key }
+                            // Planets located in this sign, in the canonical graha order
+                            let planetsInSign = Graha.allCases.filter { planetRasis[$0] == rasi }
                             if !planetsInSign.isEmpty {
                                 let text = planetsInSign.map { $0.shortAbbreviation }.joined(separator: " ")
                                 let pText = Text(text)
@@ -92,6 +94,18 @@ struct SouthIndianChartCanvas: View {
                                 context.draw(
                                     context.resolve(pText),
                                     at: CGPoint(x: cellX + cellW / 2, y: cellY + cellH / 2 + 4),
+                                    anchor: .center
+                                )
+                            }
+
+                            // Secondary points (upagrahas, padas) below the planets
+                            if let labels = extraRasiLabels[rasi], !labels.isEmpty {
+                                let extraText = Text(labels.joined(separator: " "))
+                                    .font(.caption2.weight(.medium))
+                                    .foregroundColor(DesignColor.secondaryText)
+                                context.draw(
+                                    context.resolve(extraText),
+                                    at: CGPoint(x: cellX + cellW / 2, y: cellY + cellH / 2 + 18),
                                     anchor: .center
                                 )
                             }

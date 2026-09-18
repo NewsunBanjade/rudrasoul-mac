@@ -78,10 +78,33 @@ public struct Houses: Equatable, Sendable {
     public let vertex: Double
 }
 
+/// A horizon event of a body for an observer on the ground.
+public enum RiseSetEvent: Sendable {
+    case rise
+    case set
+}
+
 public enum EphemerisError: Error, Equatable, Sendable {
     case invalidCoordinates
     case calculationFailed(String)
     case bundledEphemerisDataUnavailable
     case missingSwissEphemerisData
     case houseCalculationFailed
+    /// The body never rises or sets at this latitude around the requested day (polar regions).
+    case bodyDoesNotRiseOrSet
+}
+
+public extension JulianDay {
+    /// Julian Day of 1970-01-01 00:00 UTC, the Unix epoch.
+    static let unixEpoch = JulianDay(2_440_587.5)
+
+    /// Converts a Julian Day in Universal Time to a Foundation date.
+    var date: Date {
+        Date(timeIntervalSince1970: (value - Self.unixEpoch.value) * 86_400)
+    }
+
+    /// Creates a Julian Day in Universal Time from a Foundation date.
+    init(date: Date) {
+        self.init(Self.unixEpoch.value + date.timeIntervalSince1970 / 86_400)
+    }
 }
