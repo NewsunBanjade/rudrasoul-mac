@@ -7,17 +7,17 @@
     }
   ],
   "copyCommands" : {
-    "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKit_EphemerisKit.bundle/Resources" : {
+    "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKit_EphemerisKit.bundle/ephe" : {
       "inputs" : [
         {
           "kind" : "directory",
-          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/Resources"
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/Resources/ephe"
         }
       ],
       "outputs" : [
         {
           "kind" : "directory",
-          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKit_EphemerisKit.bundle/Resources"
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKit_EphemerisKit.bundle/ephe"
         }
       ]
     }

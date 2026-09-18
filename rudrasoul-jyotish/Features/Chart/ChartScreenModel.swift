@@ -217,7 +217,7 @@ final class ChartScreenModel {
         }
     }
 
-    init(chartID: UUID = GoldenChartFixtures.tagoreID, store: ChartStore = .shared) {
+    init(chartID: UUID = UUID(), store: ChartStore = .shared) {
         self.activeChartID = chartID
         self.selectedLibraryChartID = chartID
         self.store = store

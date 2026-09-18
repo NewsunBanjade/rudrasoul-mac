@@ -1,3 +1,4 @@
+import EphemerisKit
 import SwiftUI
 
 struct NewChartSheet: View {
@@ -21,11 +22,13 @@ struct NewChartSheet: View {
     @State private var isDST: Bool = false
     @State private var useLMTForHistorical: Bool = true
 
-    @State private var ayanamsa: String = "Lahiri (Chitra Paksha)"
-    @State private var nodeCalculation: String = "True Node"
-    @State private var houseSystem: String = "Placidus"
     @State private var chartStyle: String = "North Indian (Diamond)"
     @State private var notes: String = ""
+    @State private var calculationError: String?
+    @State private var isCalculating = false
+    @State private var locationResults: [OpenStreetMapLocationSearch.Result] = []
+    @State private var locationSearchError: String?
+    @State private var isSearchingLocations = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -42,7 +45,7 @@ struct NewChartSheet: View {
                             .background(DesignColor.groupedBackground)
                             .clipShape(Capsule())
                     }
-                    Text("Enter birth coordinates, temporal calendar, and calculation settings")
+                    Text("Enter birth details and search OpenStreetMap for the birth location")
                         .designTextStyle(.caption)
                         .foregroundStyle(DesignColor.secondaryText)
                 }
@@ -145,11 +148,54 @@ struct NewChartSheet: View {
                         SectionHeader(title: "Place of Birth")
 
                         VStack(alignment: .leading, spacing: DesignSpacing.xSmall) {
-                            Text("City / Atlas Lookup")
+                            Text("City / OpenStreetMap Lookup")
                                 .designTextStyle(.caption)
                                 .foregroundStyle(DesignColor.secondaryText)
-                            TextField("City name", text: $cityName)
-                                .textFieldStyle(.roundedBorder)
+                            HStack(spacing: DesignSpacing.small) {
+                                TextField("City name", text: $cityName)
+                                    .textFieldStyle(.roundedBorder)
+                                    .onSubmit(searchLocations)
+
+                                Button(action: searchLocations) {
+                                    if isSearchingLocations {
+                                        ProgressView()
+                                            .controlSize(.small)
+                                    } else {
+                                        Image(systemName: "magnifyingglass")
+                                    }
+                                }
+                                .help("Search OpenStreetMap")
+                                .disabled(isSearchingLocations)
+                            }
+
+                            if let locationSearchError {
+                                Text(locationSearchError)
+                                    .designTextStyle(.caption)
+                                    .foregroundStyle(DesignColor.warning)
+                            }
+
+                            if !locationResults.isEmpty {
+                                VStack(alignment: .leading, spacing: DesignSpacing.xSmall) {
+                                    ForEach(locationResults) { result in
+                                        Button {
+                                            selectLocation(result)
+                                        } label: {
+                                            VStack(alignment: .leading, spacing: 2) {
+                                                Text(result.displayName)
+                                                    .lineLimit(2)
+                                                Text("\(formattedCoordinate(result.latitude)), \(formattedCoordinate(result.longitude))")
+                                                    .font(.caption.monospaced())
+                                                    .foregroundStyle(DesignColor.secondaryText)
+                                            }
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                        }
+                                        .buttonStyle(.plain)
+                                        .padding(DesignSpacing.xSmall)
+                                    }
+                                }
+                                .background(DesignColor.groupedBackground)
+                                .clipShape(RoundedRectangle(cornerRadius: 4))
+                            }
                         }
 
                         HStack(spacing: DesignSpacing.small) {
@@ -193,46 +239,13 @@ struct NewChartSheet: View {
 
                     Divider()
 
-                    // Column 2: Calculation Settings & Notes
+                    // Column 2: Display & Notes
                     VStack(alignment: .leading, spacing: DesignSpacing.medium) {
-                        SectionHeader(title: "Calculation Settings")
+                        SectionHeader(title: "Chart Display")
 
-                        VStack(alignment: .leading, spacing: DesignSpacing.xSmall) {
-                            Text("Ayanamsa")
-                                .designTextStyle(.caption)
-                                .foregroundStyle(DesignColor.secondaryText)
-                            Picker("", selection: $ayanamsa) {
-                                Text("Lahiri (Chitra Paksha)").tag("Lahiri (Chitra Paksha)")
-                                Text("Raman").tag("Raman")
-                                Text("Krishnamurti (KP)").tag("Krishnamurti (KP)")
-                                Text("Fagan/Bradley").tag("Fagan/Bradley")
-                                Text("Tropical (Sayana)").tag("Tropical (Sayana)")
-                            }
-                        }
-
-                        VStack(alignment: .leading, spacing: DesignSpacing.xSmall) {
-                            Text("Lunar Node (Rahu / Ketu)")
-                                .designTextStyle(.caption)
-                                .foregroundStyle(DesignColor.secondaryText)
-                            Picker("", selection: $nodeCalculation) {
-                                Text("True Node").tag("True Node")
-                                Text("Mean Node").tag("Mean Node")
-                            }
-                            .pickerStyle(.segmented)
-                            .labelsHidden()
-                        }
-
-                        VStack(alignment: .leading, spacing: DesignSpacing.xSmall) {
-                            Text("Bhava / House System")
-                                .designTextStyle(.caption)
-                                .foregroundStyle(DesignColor.secondaryText)
-                            Picker("", selection: $houseSystem) {
-                                Text("Placidus").tag("Placidus")
-                                Text("Sripati").tag("Sripati")
-                                Text("Equal Bhava").tag("Equal Bhava")
-                                Text("Whole Sign").tag("Whole Sign")
-                            }
-                        }
+                        Text("Traditional Lahiri ayanamsa, true nodes, and whole-sign bhavas are used for every new chart.")
+                            .designTextStyle(.caption)
+                            .foregroundStyle(DesignColor.secondaryText)
 
                         VStack(alignment: .leading, spacing: DesignSpacing.xSmall) {
                             Text("Chart Display Style")
@@ -280,7 +293,7 @@ struct NewChartSheet: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.regular)
-                .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isCalculating)
                 .keyboardShortcut(.defaultAction)
             }
             .padding(.horizontal, DesignSpacing.large)
@@ -290,6 +303,14 @@ struct NewChartSheet: View {
         }
         .frame(minWidth: 780, idealWidth: 820, maxWidth: 900, minHeight: 600, maxHeight: 720)
         .background(DesignColor.background)
+        .alert("Chart calculation failed", isPresented: Binding(
+            get: { calculationError != nil },
+            set: { if !$0 { calculationError = nil } }
+        )) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(calculationError ?? "")
+        }
     }
 
     private var bikramSambatEquivalent: String {
@@ -309,61 +330,79 @@ struct NewChartSheet: View {
     }
 
     private func saveAndOpen() {
-        let newID = UUID()
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm:ss"
         let timeStr = formatter.string(from: birthDate)
-
-        let detail = ChartDetail(
-            id: newID,
-            name: name.trimmingCharacters(in: .whitespacesAndNewlines),
-            gender: gender,
-            birthDate: birthDate,
-            birthTimeString: timeStr,
-            calendarSystem: calendarSystem,
-            bikramSambatDateString: bikramSambatEquivalent,
-            locationName: cityName,
-            latitude: latitude,
-            longitude: longitude,
-            timezoneString: timezone,
-            ayanamsaName: ayanamsa,
-            ayanamsaValueDMS: "24° 10' 15\"",
-            nodeCalculation: nodeCalculation,
-            sunriseString: "06:00 AM",
-            sunsetString: "06:00 PM",
-            lagnaPosition: PlanetPosition(
-                graha: .ascendant,
-                rasi: .aries,
-                longitudeInRasi: 15.0,
-                formattedDMS: "15° 00' 00\"",
-                nakshatra: .bharani,
-                pada: 1,
-                isRetrograde: false,
-                isCombust: false,
-                dignity: .neutral,
-                bhava: 1,
-                charaKaraka: nil,
-                speedDegPerDay: nil
-            ),
-            planets: GoldenChartFixtures.tagore.planets,
-            bhavas: GoldenChartFixtures.tagore.bhavas,
-            vargas: GoldenChartFixtures.tagore.vargas,
-            shadbala: GoldenChartFixtures.tagore.shadbala,
-            ashtakavarga: GoldenChartFixtures.tagore.ashtakavarga,
-            dashaNodes: GoldenChartFixtures.tagore.dashaNodes,
-            currentDashaVector: "Sun › Venus › Mercury",
-            yogas: GoldenChartFixtures.tagore.yogas,
-            sarvatobhadra: GoldenChartFixtures.tagore.sarvatobhadra,
-            kota: GoldenChartFixtures.tagore.kota,
+        let input = ChartCalculationInput(
+            id: UUID(), name: name.trimmingCharacters(in: .whitespacesAndNewlines), gender: gender,
+            birthDate: birthDate, birthTimeString: timeStr, calendarSystem: calendarSystem,
+            bikramSambatDateString: bikramSambatEquivalent, locationName: cityName, latitude: latitude,
+            longitude: longitude, timezoneString: timezone, utcOffsetSeconds: timezoneOffsetSeconds,
+            ayanamsaName: "Traditional Lahiri", ayanamsa: .lahiri,
+            nodeCalculation: .trueNode,
+            houseSystem: .wholeSign,
             notes: notes.isEmpty ? [] : [
                 ChartNote(id: UUID(), date: Date(), category: "Initial Intake", content: notes, tags: ["#Intake"])
-            ],
-            predictions: []
+            ]
         )
+        isCalculating = true
+        Task {
+            do {
+                let detail = try await ChartCalculationService().calculate(input: input)
+                ChartStore.shared.saveChart(detail: detail)
+                onSave?(detail)
+                dismiss()
+            } catch {
+                calculationError = error.localizedDescription
+            }
+            isCalculating = false
+        }
+    }
 
-        ChartStore.shared.saveChart(detail: detail)
-        onSave?(detail)
-        dismiss()
+    private var timezoneOffsetSeconds: TimeInterval {
+        switch timezone {
+        case "NST (Nepal Standard Time) UTC+05:45": 20_700
+        case "IST (Indian Standard Time) UTC+05:30": 19_800
+        case "LMT (Local Mean Time)": (longitudeDecimalDegrees ?? 0) * 240
+        default: 0
+        }
+    }
+
+    private var longitudeDecimalDegrees: Double? {
+        let values = longitude.split { !$0.isNumber && $0 != "." }.compactMap { Double($0) }
+        guard let degrees = values.first else { return nil }
+        return degrees + (values.count > 1 ? values[1] / 60 : 0) + (values.count > 2 ? values[2] / 3_600 : 0)
+    }
+
+    private func searchLocations() {
+        let query = cityName
+        isSearchingLocations = true
+        locationSearchError = nil
+        locationResults = []
+
+        Task {
+            do {
+                locationResults = try await OpenStreetMapLocationSearch().search(query: query)
+                if locationResults.isEmpty {
+                    locationSearchError = "No matching locations were found. Try a more specific search."
+                }
+            } catch {
+                locationSearchError = error.localizedDescription
+            }
+            isSearchingLocations = false
+        }
+    }
+
+    private func selectLocation(_ result: OpenStreetMapLocationSearch.Result) {
+        cityName = result.displayName
+        latitude = formattedCoordinate(result.latitude)
+        longitude = formattedCoordinate(result.longitude)
+        locationResults = []
+        locationSearchError = nil
+    }
+
+    private func formattedCoordinate(_ coordinate: Double) -> String {
+        String(format: "%.6f", locale: Locale(identifier: "en_US_POSIX"), coordinate)
     }
 }
 

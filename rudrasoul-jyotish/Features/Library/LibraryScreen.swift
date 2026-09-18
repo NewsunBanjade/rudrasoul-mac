@@ -5,10 +5,9 @@ struct LibraryScreen: View {
     @Bindable var model: LibraryScreenModel
 
     @State private var isPresentingNewChart = false
-    @State private var columnVisibility: NavigationSplitViewVisibility = .all
 
     var body: some View {
-        NavigationSplitView(columnVisibility: $columnVisibility) {
+        NavigationSplitView {
             List(selection: $model.destination) {
                 Section("library.sidebar.section") {
                     Label("library.sidebar.allCharts", systemImage: "rectangle.stack")
@@ -37,17 +36,6 @@ struct LibraryScreen: View {
             await model.load()
         }
         .toolbar {
-            ToolbarItemGroup(placement: .navigation) {
-                Button {
-                    withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
-                        columnVisibility = (columnVisibility == .detailOnly ? .all : .detailOnly)
-                    }
-                } label: {
-                    Image(systemName: "sidebar.leading")
-                }
-                .help("Toggle Sidebar (⌃⌘S)")
-                .keyboardShortcut("s", modifiers: [.control, .command])
-            }
 
             ToolbarItemGroup(placement: .primaryAction) {
                 Button {

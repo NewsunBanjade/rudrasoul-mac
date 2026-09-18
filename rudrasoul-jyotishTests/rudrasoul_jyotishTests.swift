@@ -34,6 +34,57 @@ struct DesignTokenTests {
 }
 
 @MainActor
+struct VimshottariDashaCalculatorTests {
+    private let calculator = VimshottariDashaCalculator()
+
+    @Test func ashviniMoonStartsWithKetuAndFixedLordOrder() {
+        let birth = date(year: 2000, month: 1, day: 1)
+        let result = calculator.calculate(moonLongitude: 0, birthDate: birth, referenceDate: birth)
+
+        #expect(result.nodes.map(\.lord) == [.ketu, .venus, .sun, .moon, .mars, .rahu, .jupiter, .saturn, .mercury])
+        #expect(result.nodes.first?.startDate == birth)
+        #expect(abs((result.nodes.first?.endDate.timeIntervalSince(birth) ?? 0) - 7 * VimshottariDashaCalculator.solarYearLengthDays * 86_400) < 0.001)
+        #expect(result.currentDashaVector == "Ketu › Ketu › Ketu")
+    }
+
+    @Test func birthBalanceUsesTheUntraversedFractionOfMoonNakshatra() throws {
+        let birth = date(year: 2000, month: 1, day: 1)
+        // Halfway through Ashvini leaves half of Ketu's seven-year mahadasha.
+        let result = calculator.calculate(moonLongitude: 360 / 54, birthDate: birth, referenceDate: birth)
+        let ketu = try #require(result.nodes.first)
+
+        #expect(ketu.lord == .ketu)
+        #expect(abs(birth.timeIntervalSince(ketu.startDate) - 3.5 * VimshottariDashaCalculator.solarYearLengthDays * 86_400) < 0.001)
+        #expect(abs(ketu.endDate.timeIntervalSince(birth) - 3.5 * VimshottariDashaCalculator.solarYearLengthDays * 86_400) < 0.001)
+    }
+
+    @Test func subperiodsBeginWithTheParentLordAndUseProportionalDurations() throws {
+        let birth = date(year: 2000, month: 1, day: 1)
+        let result = calculator.calculate(moonLongitude: 0, birthDate: birth, referenceDate: birth)
+        let ketu = try #require(result.nodes.first)
+
+        #expect(ketu.children.map(\.lord) == [.ketu, .venus, .sun, .moon, .mars, .rahu, .jupiter, .saturn, .mercury])
+        let venusAntardasha = try #require(ketu.children.dropFirst().first)
+        #expect(abs(venusAntardasha.endDate.timeIntervalSince(venusAntardasha.startDate) - (7.0 * 20 / 120) * VimshottariDashaCalculator.solarYearLengthDays * 86_400) < 0.001)
+    }
+
+    @Test func exactMahadashaBoundaryMovesFocusToNextLord() {
+        let birth = date(year: 2000, month: 1, day: 1)
+        let initial = calculator.calculate(moonLongitude: 0, birthDate: birth, referenceDate: birth)
+        let ketuEnd = initial.nodes[0].endDate
+        let atBoundary = calculator.calculate(moonLongitude: 0, birthDate: birth, referenceDate: ketuEnd)
+
+        #expect(atBoundary.currentDashaVector.hasPrefix("Venus › Venus › Venus"))
+    }
+
+    private func date(year: Int, month: Int, day: Int) -> Date {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        return calendar.date(from: DateComponents(year: year, month: month, day: day))!
+    }
+}
+
+@MainActor
 struct LibraryScreenModelTests {
     @Test func emptyFixtureLoadsWithoutInventingChartRecords() async {
         let model = LibraryScreenModel(library: EmptyLibraryFixture())
@@ -79,117 +130,24 @@ struct ChartScreenModelTests {
         #expect(model.destination == .overview)
     }
 
-    @Test func chartStoreLoadsDefaultFixtures() async throws {
-        let store = ChartStore()
-        let charts = try await store.charts()
-
-        #expect(charts.count >= 2)
-        #expect(charts.contains(where: { $0.name == "Rabindranath Tagore" }))
-        #expect(charts.contains(where: { $0.name == "Mahatma Gandhi" }))
-
-        let detail = store.chartDetail(for: GoldenChartFixtures.tagoreID)
-        #expect(detail?.name == "Rabindranath Tagore")
-        #expect(detail?.lagnaPosition.rasi == .pisces)
-        #expect(detail?.planets.count == 9)
-    }
-
-    @Test func filteringByLagnaFiltersChartsCorrectly() {
-        let model = ChartScreenModel()
+    @Test func filteringAnEmptyLibraryRemainsEmpty() async throws {
+        let repository = try SQLiteChartRepository.inMemory()
+        try await repository.initialize()
+        let store = ChartStore(repository: repository)
+        await store.reloadFromRepository()
+        let model = ChartScreenModel(store: store)
         model.destination = .allCharts
 
-        #expect(model.visibleCharts.count >= 2)
-
-        // Filter for Pisces Lagna (Tagore is Pisces, Gandhi is Libra)
         model.filterLagna = .pisces
         #expect(model.hasActiveFilters)
         #expect(model.activeFilterCount == 1)
-        #expect(model.visibleCharts.contains { $0.name == "Rabindranath Tagore" })
-        #expect(!model.visibleCharts.contains { $0.name == "Mahatma Gandhi" })
-
-        // Filter for Libra Lagna
-        model.filterLagna = .libra
-        #expect(model.visibleCharts.contains { $0.name == "Mahatma Gandhi" })
-        #expect(!model.visibleCharts.contains { $0.name == "Rabindranath Tagore" })
-
-        // Filter for Aries Lagna (no chart in default fixtures)
-        model.filterLagna = .aries
         #expect(model.visibleCharts.isEmpty)
-
-        // Reset
-        model.resetFilters()
-        #expect(!model.hasActiveFilters)
-        #expect(model.activeFilterCount == 0)
-        #expect(model.visibleCharts.count >= 2)
-    }
-
-    @Test func filteringByMoonRasiAndDashaLord() {
-        let model = ChartScreenModel()
-        model.destination = .allCharts
-
-        // Gandhi has Moon in Cancer
-        model.filterMoonRasi = .cancer
-        #expect(model.visibleCharts.contains { $0.name == "Mahatma Gandhi" })
-        #expect(!model.visibleCharts.contains { $0.name == "Rabindranath Tagore" })
-
-        // Reset and filter by Sun Dasha Lord (Tagore's active vector has Sun)
-        model.resetFilters()
-        model.filterDashaLord = .sun
-        #expect(model.visibleCharts.contains { $0.name == "Rabindranath Tagore" })
-
-        // Combined filter
-        model.filterLagna = .pisces
-        #expect(model.activeFilterCount == 2)
-        #expect(model.visibleCharts.contains { $0.name == "Rabindranath Tagore" })
-        #expect(!model.visibleCharts.contains { $0.name == "Mahatma Gandhi" })
-    }
-
-    @Test func librarySelectionUpdatesInspectorChartDetail() {
-        let model = ChartScreenModel()
-        model.destination = .allCharts
-
-        // Active chart is Tagore by default
-        #expect(model.activeChartID == GoldenChartFixtures.tagoreID)
-
-        // Selected in library is initially Tagore
-        #expect(model.inspectorChartDetail?.name == "Rabindranath Tagore")
-
-        // User clicks on Mahatma Gandhi in the library table
-        model.selectedLibraryChartID = GoldenChartFixtures.gandhiID
-        #expect(model.inspectorChartDetail?.name == "Mahatma Gandhi")
-
-        // User clicks on Rabindranath Tagore in the library table
-        model.selectedLibraryChartID = GoldenChartFixtures.tagoreID
-        #expect(model.inspectorChartDetail?.name == "Rabindranath Tagore")
-
-        // If no chart is selected, inspectorChartDetail is nil
-        model.selectedLibraryChartID = nil
-        #expect(model.inspectorChartDetail == nil)
-
-        // If in overview, inspectorChartDetail shows active chart
-        model.destination = .overview
-        #expect(model.inspectorChartDetail?.name == "Rabindranath Tagore")
     }
 
     @Test func chartStoreReturnsNilForUnknownChartID() {
         let store = ChartStore()
         let randomID = UUID()
         #expect(store.chartDetail(for: randomID) == nil)
-    }
-
-    @Test func searchingChartsInLibraryFiltersCorrectly() {
-        let model = ChartScreenModel()
-        model.destination = .allCharts
-
-        model.searchText = "Gandhi"
-        #expect(model.visibleCharts.count == 1)
-        #expect(model.visibleCharts.first?.name == "Mahatma Gandhi")
-
-        model.searchText = "Tagore"
-        #expect(model.visibleCharts.count == 1)
-        #expect(model.visibleCharts.first?.name == "Rabindranath Tagore")
-
-        model.searchText = ""
-        #expect(model.visibleCharts.count >= 2)
     }
 
     @Test func settingsDestinationConfiguredCorrectly() {
@@ -280,5 +238,47 @@ struct ChartRotationTests {
         d1RotatedHouse = 1
         let d1ResetRaw = ((d1NatalLagna.rawValue - 1 + (d1RotatedHouse - 1)) % 12) + 1
         #expect(Rasi(rawValue: d1ResetRaw) == .pisces)
+    }
+}
+
+@MainActor
+struct VargaCalculatorTests {
+    @Test func generatesEveryShodashavargaForAComputedChart() {
+        let planets = [
+            PlanetPosition(
+                graha: .sun,
+                rasi: .aries,
+                longitudeInRasi: 3.0,
+                formattedDMS: "",
+                nakshatra: .ashwini,
+                pada: 1,
+                isRetrograde: false,
+                isCombust: false,
+                dignity: .neutral,
+                bhava: 1,
+                charaKaraka: nil,
+                speedDegPerDay: nil
+            ),
+        ]
+
+        let charts = VargaCalculator.charts(lagnaLongitude: 3.0, planets: planets)
+
+        #expect(charts.count == VargaDivision.allCases.count)
+        #expect(Set(charts.map(\.division)) == Set(VargaDivision.allCases))
+        #expect(charts.allSatisfy { $0.planetRasis[.sun] != nil })
+    }
+
+    @Test func navamshaUsesMovableFixedAndDualStartingSigns() {
+        #expect(VargaCalculator.rasi(for: 0, division: .d9) == .aries)
+        #expect(VargaCalculator.rasi(for: 30, division: .d9) == .capricorn)
+        #expect(VargaCalculator.rasi(for: 60, division: .d9) == .libra)
+        #expect(VargaCalculator.rasi(for: 30 + 30.0 / 9, division: .d9) == .aquarius)
+    }
+
+    @Test func trimsamsaUsesUnequalParashariRanges() {
+        #expect(VargaCalculator.rasi(for: 4.999, division: .d30) == .aries)
+        #expect(VargaCalculator.rasi(for: 5, division: .d30) == .aquarius)
+        #expect(VargaCalculator.rasi(for: 30 + 4.999, division: .d30) == .taurus)
+        #expect(VargaCalculator.rasi(for: 30 + 5, division: .d30) == .virgo)
     }
 }

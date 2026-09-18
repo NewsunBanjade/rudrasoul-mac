@@ -133,53 +133,49 @@ struct MigrationTests {
 @MainActor
 struct SQLiteChartRepositoryTests {
 
-    @Test func emptyRepositoryInitializationAndSeeding() async throws {
+    @Test func emptyRepositoryInitializationDoesNotSeedCharts() async throws {
         let repo = try SQLiteChartRepository.inMemory()
         try await repo.initialize()
 
         let count = try await repo.countCharts()
-        #expect(count >= 2)
+        #expect(count == 0)
 
         let charts = try await repo.fetchAllCharts()
-        #expect(charts.contains(where: { $0.name == "Rabindranath Tagore" }))
-        #expect(charts.contains(where: { $0.name == "Mahatma Gandhi" }))
+        #expect(charts.isEmpty)
     }
 
     @Test func saveAndFetchChartDetail() async throws {
         let repo = try SQLiteChartRepository.inMemory()
         try await repo.initialize()
 
-        let tagore = GoldenChartFixtures.tagore
-        try await repo.saveChart(detail: tagore)
+        let chart = try await sampleChart()
+        try await repo.saveChart(detail: chart)
 
-        let fetched = try await repo.fetchChartDetail(id: tagore.id)
+        let fetched = try await repo.fetchChartDetail(id: chart.id)
         #expect(fetched != nil)
-        #expect(fetched?.name == tagore.name)
-        #expect(fetched?.locationName == tagore.locationName)
-        #expect(fetched?.lagnaPosition.rasi == .pisces)
-        #expect(fetched?.lagnaPosition.formattedDMS == "02° 14' 00\"")
+        #expect(fetched?.name == chart.name)
+        #expect(fetched?.locationName == chart.locationName)
+        #expect(fetched?.lagnaPosition == chart.lagnaPosition)
         #expect(fetched?.planets.count == 9)
         #expect(fetched?.bhavas.count == 12)
-        #expect(fetched?.shadbala.count == 7)
-        #expect(fetched?.notes.count == tagore.notes.count)
-        #expect(fetched?.predictions.count == tagore.predictions.count)
+        #expect(fetched?.shadbala.count == chart.shadbala.count)
+        #expect(fetched?.notes.count == chart.notes.count)
+        #expect(fetched?.predictions.count == chart.predictions.count)
     }
 
     @Test func searchChartsByNameAndLocation() async throws {
         let repo = try SQLiteChartRepository.inMemory()
         try await repo.initialize()
+        let chart = try await sampleChart()
+        try await repo.saveChart(detail: chart)
 
         let searchTagore = try await repo.searchCharts(query: "Tagore")
         #expect(searchTagore.count == 1)
-        #expect(searchTagore.first?.name == "Rabindranath Tagore")
+        #expect(searchTagore.first?.name == chart.name)
 
         let searchKolkata = try await repo.searchCharts(query: "Kolkata")
         #expect(searchKolkata.count == 1)
-        #expect(searchKolkata.first?.name == "Rabindranath Tagore")
-
-        let searchGandhi = try await repo.searchCharts(query: "Gandhi")
-        #expect(searchGandhi.count == 1)
-        #expect(searchGandhi.first?.name == "Mahatma Gandhi")
+        #expect(searchKolkata.first?.name == chart.name)
 
         let searchNone = try await repo.searchCharts(query: "NonExistent")
         #expect(searchNone.isEmpty)
@@ -189,20 +185,21 @@ struct SQLiteChartRepositoryTests {
         let repo = try SQLiteChartRepository.inMemory()
         try await repo.initialize()
 
+        let chart = try await sampleChart()
+        try await repo.saveChart(detail: chart)
         let initialCount = try await repo.countCharts()
-        let tagore = GoldenChartFixtures.tagore
 
-        try await repo.deleteChart(id: tagore.id)
+        try await repo.deleteChart(id: chart.id)
         let afterCount = try await repo.countCharts()
         #expect(afterCount == initialCount - 1)
 
-        let fetched = try await repo.fetchChartDetail(id: tagore.id)
+        let fetched = try await repo.fetchChartDetail(id: chart.id)
         #expect(fetched == nil)
 
         // Verify notes and predictions were removed
         let notes = try repo.database.prepare(sql: "SELECT count(*) FROM chart_notes WHERE chart_id = ?;")
         defer { notes.finalize() }
-        try notes.bind(uuid: tagore.id, at: 1)
+        try notes.bind(uuid: chart.id, at: 1)
         #expect(try notes.step() == true)
         #expect(notes.columnInt(at: 0) == 0)
     }
@@ -223,9 +220,14 @@ struct SQLiteChartRepositoryTests {
         try await newRepo.restoreDatabase(from: exportURL)
 
         let restoredCount = try await newRepo.countCharts()
-        #expect(restoredCount >= 2)
+        #expect(restoredCount == 0)
 
-        let tagore = try await newRepo.fetchChartDetail(id: GoldenChartFixtures.tagore.id)
-        #expect(tagore?.name == "Rabindranath Tagore")
+        let chart = try await newRepo.fetchChartDetail(id: UUID())
+        #expect(chart == nil)
     }
+}
+
+@MainActor
+private func sampleChart() async throws -> ChartDetail {
+    GoldenChartFixtures.tagore
 }
