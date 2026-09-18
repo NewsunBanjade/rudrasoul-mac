@@ -1,9 +1,23 @@
 import SwiftUI
 
+/// Practitioner notes and the prediction journal. Every change is handed back through
+/// `onUpdate`, which the workspace uses to persist the chart in the library.
 struct NotesPredictionsView: View {
-    @State var chart: ChartDetail
+    @State private var chart: ChartDetail
+    let onUpdate: ((ChartDetail) -> Void)?
+
     @State private var newNoteText: String = ""
     @State private var selectedTab: Int = 0 // 0 = Notes, 1 = Predictions
+    @State private var isAddingPrediction = false
+    @State private var predictionTitle = ""
+    @State private var predictionDate = Date()
+    @State private var predictionDetails = ""
+    @State private var predictionDashaContext = ""
+
+    init(chart: ChartDetail, onUpdate: ((ChartDetail) -> Void)? = nil) {
+        _chart = State(initialValue: chart)
+        self.onUpdate = onUpdate
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -19,9 +33,9 @@ struct NotesPredictionsView: View {
                 Spacer()
 
                 HStack(spacing: 4) {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(DesignColor.benefic)
-                    Text("Autosaved to library")
+                    Image(systemName: onUpdate == nil ? "exclamationmark.circle" : "checkmark.circle.fill")
+                        .foregroundStyle(onUpdate == nil ? DesignColor.warning : DesignColor.benefic)
+                    Text(onUpdate == nil ? "Changes are not saved in this view" : "Saved to the library on every change")
                         .designTextStyle(.caption)
                         .foregroundStyle(DesignColor.secondaryText)
                 }
@@ -40,12 +54,21 @@ struct NotesPredictionsView: View {
         .background(DesignColor.background)
     }
 
+    private func persist() {
+        onUpdate?(chart)
+    }
+
+    // MARK: - Notes
+
+    private var trimmedNote: String {
+        newNoteText.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
     private var notesContent: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: DesignSpacing.medium) {
-                // New Note Box
                 VStack(alignment: .leading, spacing: DesignSpacing.xSmall) {
-                    Text("Add Clinical Observation")
+                    Text("Add an observation")
                         .designTextStyle(.caption)
                         .foregroundStyle(DesignColor.secondaryText)
 
@@ -56,118 +79,273 @@ struct NotesPredictionsView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 4))
 
                     HStack {
+                        Text("Running: \(chart.currentDashaVector)")
+                            .designTextStyle(.caption, monospacedDigits: true)
+                            .foregroundStyle(DesignColor.secondaryText)
                         Spacer()
                         Button("Save Note") {
-                            guard !newNoteText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
-                            let note = ChartNote(
-                                id: UUID(),
-                                date: Date(),
-                                category: "Clinical",
-                                content: newNoteText,
-                                tags: ["#Clinical"]
-                            )
-                            chart.notes.insert(note, at: 0)
-                            newNoteText = ""
+                            saveNote()
                         }
                         .buttonStyle(.borderedProminent)
                         .controlSize(.small)
-                        .disabled(newNoteText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                        .disabled(trimmedNote.isEmpty)
                     }
                 }
                 .padding(DesignSpacing.small)
                 .background(DesignColor.groupedBackground)
                 .clipShape(RoundedRectangle(cornerRadius: 6))
 
-                // Existing Notes List
+                if chart.notes.isEmpty {
+                    Text("No notes yet.")
+                        .designTextStyle(.caption)
+                        .foregroundStyle(DesignColor.secondaryText)
+                }
+
                 ForEach(chart.notes) { note in
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack {
-                            Text(note.category)
-                                .font(.system(size: 10, weight: .bold))
-                                .foregroundColor(DesignColor.accent)
-                            Spacer()
-                            Text(note.date, format: .dateTime.year().month().day().hour().minute())
-                                .designTextStyle(.caption, monospacedDigits: true)
-                                .foregroundStyle(DesignColor.secondaryText)
-                        }
-
-                        Text(note.content)
-                            .designTextStyle(.body)
-                            .foregroundStyle(DesignColor.primaryText)
-
-                        HStack {
-                            ForEach(note.tags, id: \.self) { tag in
-                                Text(tag)
-                                    .font(.system(size: 9).monospaced())
-                                    .padding(.horizontal, 4)
-                                    .padding(.vertical, 1)
-                                    .background(DesignColor.groupedBackground)
-                                    .clipShape(RoundedRectangle(cornerRadius: 3))
+                    noteCard(note)
+                        .contextMenu {
+                            Button(role: .destructive) {
+                                deleteNote(note)
+                            } label: {
+                                Label("Delete Note", systemImage: "trash")
                             }
                         }
-                    }
-                    .padding(DesignSpacing.small)
-                    .background(DesignColor.background)
-                    .clipShape(RoundedRectangle(cornerRadius: 6))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 6)
-                            .stroke(DesignColor.separator, lineWidth: 1)
-                    )
                 }
             }
             .padding(DesignSpacing.medium)
         }
+    }
+
+    private func saveNote() {
+        guard !trimmedNote.isEmpty else { return }
+        let note = ChartNote(
+            id: UUID(),
+            date: Date(),
+            category: "Observation",
+            content: trimmedNote,
+            tags: ["#Observation"]
+        )
+        chart.notes.insert(note, at: 0)
+        newNoteText = ""
+        persist()
+    }
+
+    private func deleteNote(_ note: ChartNote) {
+        chart.notes.removeAll { $0.id == note.id }
+        persist()
+    }
+
+    private func noteCard(_ note: ChartNote) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Text(note.category)
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundStyle(DesignColor.accent)
+                Spacer()
+                Text(note.date, format: .dateTime.year().month().day().hour().minute())
+                    .designTextStyle(.caption, monospacedDigits: true)
+                    .foregroundStyle(DesignColor.secondaryText)
+            }
+
+            Text(note.content)
+                .designTextStyle(.body)
+                .foregroundStyle(DesignColor.primaryText)
+                .textSelection(.enabled)
+
+            if !note.tags.isEmpty {
+                HStack {
+                    ForEach(note.tags, id: \.self) { tag in
+                        Text(tag)
+                            .font(.system(size: 9).monospaced())
+                            .padding(.horizontal, 4)
+                            .padding(.vertical, 1)
+                            .background(DesignColor.groupedBackground)
+                            .clipShape(RoundedRectangle(cornerRadius: 3))
+                    }
+                }
+            }
+        }
+        .padding(DesignSpacing.small)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(DesignColor.background)
+        .clipShape(RoundedRectangle(cornerRadius: 6))
+        .overlay(
+            RoundedRectangle(cornerRadius: 6)
+                .stroke(DesignColor.separator, lineWidth: 1)
+        )
+    }
+
+    // MARK: - Predictions
+
+    private var trimmedPredictionTitle: String {
+        predictionTitle.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     private var predictionsContent: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: DesignSpacing.medium) {
-                Text("Logged Predictions & Verification Outcomes")
-                    .designTextStyle(.section)
-
-                ForEach(chart.predictions) { pred in
-                    VStack(alignment: .leading, spacing: DesignSpacing.xSmall) {
-                        HStack {
-                            Text(pred.title)
-                                .designTextStyle(.section)
-                            Spacer()
-                            statusBadge(for: pred.status)
+                HStack {
+                    Text("Logged predictions and their outcomes")
+                        .designTextStyle(.section)
+                    Spacer()
+                    Button(isAddingPrediction ? "Cancel" : "Log Prediction…") {
+                        withAnimation(.easeInOut(duration: 0.15)) {
+                            isAddingPrediction.toggle()
                         }
-
-                        HStack {
-                            Text("Target Date: \(pred.targetDate.formatted(date: .abbreviated, time: .omitted))")
-                                .designTextStyle(.caption, monospacedDigits: true)
-                            Spacer()
-                            Text("Dasha: \(pred.dashaContext)")
-                                .designTextStyle(.caption, monospacedDigits: true)
-                                .foregroundStyle(DesignColor.accent)
-                        }
-
-                        Text(pred.details)
-                            .designTextStyle(.body)
-                            .foregroundStyle(DesignColor.primaryText)
                     }
-                    .padding(DesignSpacing.medium)
-                    .background(DesignColor.background)
-                    .clipShape(RoundedRectangle(cornerRadius: 6))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 6)
-                            .stroke(DesignColor.separator, lineWidth: 1)
-                    )
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                }
+
+                if isAddingPrediction {
+                    predictionForm
+                }
+
+                if chart.predictions.isEmpty {
+                    Text("No predictions logged yet. Record a prediction with its target date, then mark it confirmed or inaccurate once the outcome is known.")
+                        .designTextStyle(.caption)
+                        .foregroundStyle(DesignColor.secondaryText)
+                }
+
+                ForEach(chart.predictions) { prediction in
+                    predictionCard(prediction)
                 }
             }
             .padding(DesignSpacing.medium)
         }
     }
 
+    private var predictionForm: some View {
+        VStack(alignment: .leading, spacing: DesignSpacing.small) {
+            TextField("Prediction (e.g. change of residence)", text: $predictionTitle)
+                .textFieldStyle(.roundedBorder)
+
+            HStack(spacing: DesignSpacing.medium) {
+                DatePicker("Target date", selection: $predictionDate, displayedComponents: .date)
+                    .datePickerStyle(.field)
+                TextField("Dasha context (optional)", text: $predictionDashaContext)
+                    .textFieldStyle(.roundedBorder)
+            }
+
+            TextEditor(text: $predictionDetails)
+                .font(.body)
+                .frame(height: 64)
+                .border(DesignColor.separator, width: 1)
+                .clipShape(RoundedRectangle(cornerRadius: 4))
+
+            HStack {
+                Spacer()
+                Button("Save Prediction") {
+                    savePrediction()
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.small)
+                .disabled(trimmedPredictionTitle.isEmpty)
+            }
+        }
+        .padding(DesignSpacing.small)
+        .background(DesignColor.groupedBackground)
+        .clipShape(RoundedRectangle(cornerRadius: 6))
+    }
+
+    private func savePrediction() {
+        guard !trimmedPredictionTitle.isEmpty else { return }
+        let context = predictionDashaContext.trimmingCharacters(in: .whitespacesAndNewlines)
+        let record = PredictionRecord(
+            id: UUID(),
+            title: trimmedPredictionTitle,
+            targetDate: predictionDate,
+            status: .pending,
+            dashaContext: context.isEmpty ? chart.currentDashaVector : context,
+            details: predictionDetails.trimmingCharacters(in: .whitespacesAndNewlines)
+        )
+        chart.predictions.insert(record, at: 0)
+        predictionTitle = ""
+        predictionDetails = ""
+        predictionDashaContext = ""
+        predictionDate = Date()
+        isAddingPrediction = false
+        persist()
+    }
+
+    private func setStatus(_ status: PredictionRecord.Status, for prediction: PredictionRecord) {
+        guard let index = chart.predictions.firstIndex(where: { $0.id == prediction.id }) else { return }
+        chart.predictions[index] = PredictionRecord(
+            id: prediction.id,
+            title: prediction.title,
+            targetDate: prediction.targetDate,
+            status: status,
+            dashaContext: prediction.dashaContext,
+            details: prediction.details
+        )
+        persist()
+    }
+
+    private func deletePrediction(_ prediction: PredictionRecord) {
+        chart.predictions.removeAll { $0.id == prediction.id }
+        persist()
+    }
+
+    private func predictionCard(_ prediction: PredictionRecord) -> some View {
+        VStack(alignment: .leading, spacing: DesignSpacing.xSmall) {
+            HStack {
+                Text(prediction.title)
+                    .designTextStyle(.section)
+                Spacer()
+                Menu {
+                    ForEach(PredictionRecord.Status.allCases, id: \.self) { status in
+                        Button(status.rawValue) {
+                            setStatus(status, for: prediction)
+                        }
+                    }
+                    Divider()
+                    Button(role: .destructive) {
+                        deletePrediction(prediction)
+                    } label: {
+                        Label("Delete Prediction", systemImage: "trash")
+                    }
+                } label: {
+                    statusBadge(for: prediction.status)
+                }
+                .menuStyle(.borderlessButton)
+                .fixedSize()
+                .help("Change the outcome")
+            }
+
+            HStack {
+                Text("Target: \(prediction.targetDate.formatted(date: .abbreviated, time: .omitted))")
+                    .designTextStyle(.caption, monospacedDigits: true)
+                Spacer()
+                Text("Dasha: \(prediction.dashaContext)")
+                    .designTextStyle(.caption, monospacedDigits: true)
+                    .foregroundStyle(DesignColor.accent)
+            }
+
+            if !prediction.details.isEmpty {
+                Text(prediction.details)
+                    .designTextStyle(.body)
+                    .foregroundStyle(DesignColor.primaryText)
+                    .textSelection(.enabled)
+            }
+        }
+        .padding(DesignSpacing.medium)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(DesignColor.background)
+        .clipShape(RoundedRectangle(cornerRadius: 6))
+        .overlay(
+            RoundedRectangle(cornerRadius: 6)
+                .stroke(DesignColor.separator, lineWidth: 1)
+        )
+    }
+
     private func statusBadge(for status: PredictionRecord.Status) -> some View {
-        let (color, text) = switch status {
-        case .confirmed: (DesignColor.benefic, "Confirmed")
-        case .pending: (DesignColor.accent, "Pending")
-        case .inaccurate: (DesignColor.malefic, "Inaccurate")
+        let color: Color = switch status {
+        case .confirmed: DesignColor.benefic
+        case .pending: DesignColor.accent
+        case .inaccurate: DesignColor.malefic
         }
 
-        return Text(text)
+        return Text(status.rawValue)
             .font(.system(size: 10, weight: .bold))
             .padding(.horizontal, 6)
             .padding(.vertical, 2)

@@ -1,7 +1,11 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var model = ChartScreenModel()
+    let model: ChartScreenModel
+
+    init(model: ChartScreenModel = ChartScreenModel()) {
+        self.model = model
+    }
 
     var body: some View {
         ChartScreen(model: model)

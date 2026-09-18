@@ -77,6 +77,20 @@ final class ChartStore: LibraryProviding {
         }
     }
 
+    /// Recomputes a stored chart with the current engine from its birth data, keeping the
+    /// practitioner's notes and predictions. Throws when the ephemeris rejects the input.
+    func recalculateChart(id: UUID) async throws {
+        var stored = chartDetails[id]
+        if stored == nil {
+            stored = try await repository.fetchChartDetail(id: id)
+        }
+        guard let detail = stored else { return }
+        let input = ChartCalculationInput(recomputing: detail)
+        var recomputed = try await ChartCalculationService().calculate(input: input)
+        recomputed.predictions = detail.predictions
+        saveChart(detail: recomputed)
+    }
+
     func deleteChart(id: UUID) {
         chartDetails.removeValue(forKey: id)
         chartsList.removeAll { $0.id == id }

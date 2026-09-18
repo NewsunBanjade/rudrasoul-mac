@@ -2,7 +2,6 @@ import SwiftUI
 
 struct DivisionalChartsView: View {
     let chart: ChartDetail
-    var model: ChartScreenModel = ChartScreenModel()
     @State private var selectedDivision: VargaDivision = .d9
     @State private var chartStyle: Int = 0 // 0 = North Indian, 1 = South Indian
     @State private var rotatedLagnaHouse: Int = 1 // 1 = Natal Varga Lagna, 2...12 = Rotated House

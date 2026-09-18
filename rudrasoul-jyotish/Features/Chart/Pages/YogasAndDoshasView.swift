@@ -5,6 +5,20 @@ struct YogasAndDoshasView: View {
     @State private var filterCategory: String = "All"
 
     var body: some View {
+        if chart.yogas.isEmpty {
+            ContentUnavailableView(
+                "Yoga detection is not available yet",
+                systemImage: "checkmark.seal",
+                description: Text("Automatic yoga and dosha detection is not part of this version, so nothing is listed rather than claiming an unverified combination.")
+            )
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(DesignColor.background)
+        } else {
+            yogaList
+        }
+    }
+
+    private var yogaList: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: DesignSpacing.medium) {
                 // Category Filter

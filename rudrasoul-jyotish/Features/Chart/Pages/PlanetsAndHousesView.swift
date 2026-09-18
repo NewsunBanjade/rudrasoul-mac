@@ -103,11 +103,18 @@ struct PlanetsAndHousesView: View {
                         Text("R")
                             .font(.system(size: 10, weight: .bold).monospaced())
                             .foregroundColor(DesignColor.accent)
+                            .help("Retrograde")
+                    }
+                    if p.isCombust {
+                        Text("C")
+                            .font(.system(size: 10, weight: .bold).monospaced())
+                            .foregroundColor(DesignColor.malefic)
+                            .help("Combust (within the Sun's orb)")
                     }
                 }
                 .designTextStyle(.body)
             }
-            .width(min: 120, ideal: 140)
+            .width(min: 120, ideal: 150)
 
             TableColumn("Rasi") { p in
                 Text("\(p.rasi.sanskritName) (\(p.rasi.englishName))")
@@ -206,6 +213,18 @@ struct PlanetsAndHousesView: View {
                 }
             }
             .width(min: 130, ideal: 160)
+
+            TableColumn("Bhava Bala") { b in
+                if let bala = chart.bhavaBala?.first(where: { $0.house == b.number }) {
+                    Text(String(format: "%.2f rupas · #%d", bala.totalRupas, bala.rank))
+                        .designTextStyle(.body, monospacedDigits: true)
+                } else {
+                    Text("—")
+                        .designTextStyle(.body)
+                        .foregroundStyle(DesignColor.secondaryText)
+                }
+            }
+            .width(min: 120, ideal: 140)
 
             TableColumn("Significations") { b in
                 Text(b.significance)

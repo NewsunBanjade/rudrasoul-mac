@@ -6,7 +6,7 @@ struct SettingsScreen: View {
 
     @AppStorage("defaultAyanamsa") private var defaultAyanamsa = "Lahiri (Chitra Paksha)"
     @AppStorage("defaultLunarNode") private var defaultLunarNode = "True Node"
-    @AppStorage("defaultHouseSystem") private var defaultHouseSystem = "Placidus"
+    @AppStorage("defaultHouseSystem") private var defaultHouseSystem = "Whole Sign"
     @AppStorage("dashaYearLength") private var dashaYearLength = "Solar (365.2422 days)"
     @AppStorage("defaultChartStyle") private var defaultChartStyle = "North Indian (Diamond)"
     @AppStorage("defaultCalendar") private var defaultCalendar = "A.D. (Gregorian)"
@@ -60,8 +60,6 @@ struct SettingsScreen: View {
                 Text("Lahiri (Chitra Paksha)").tag("Lahiri (Chitra Paksha)")
                 Text("Raman").tag("Raman")
                 Text("Krishnamurti (KP)").tag("Krishnamurti (KP)")
-                Text("Fagan / Bradley").tag("Fagan / Bradley")
-                Text("Tropical (Sayana)").tag("Tropical (Sayana)")
             }
 
             Picker("Lunar Node (Rahu/Ketu)", selection: $defaultLunarNode) {
@@ -70,11 +68,15 @@ struct SettingsScreen: View {
             }
 
             Picker("Default House System", selection: $defaultHouseSystem) {
-                Text("Placidus").tag("Placidus")
-                Text("Sripati").tag("Sripati")
-                Text("Equal Bhava").tag("Equal Bhava")
                 Text("Whole Sign").tag("Whole Sign")
+                Text("Placidus").tag("Placidus")
+                Text("Koch").tag("Koch")
+                Text("Equal").tag("Equal")
             }
+
+            Text("These defaults apply to charts created afterwards. Existing charts keep the settings they were calculated with.")
+                .designTextStyle(.caption)
+                .foregroundStyle(DesignColor.secondaryText)
 
             Picker("Dasha Year Length", selection: $dashaYearLength) {
                 Text("Solar (365.2422 days)").tag("Solar (365.2422 days)")

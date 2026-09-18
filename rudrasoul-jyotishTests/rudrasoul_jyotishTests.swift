@@ -160,6 +160,69 @@ struct ChartScreenModelTests {
         #expect(ChartScreenModel.Destination.tools.contains(.settings))
         #expect(model.inspectorChartDetail == nil)
     }
+
+    @Test func openingChartsCreatesTabsAndReusesExistingOnes() {
+        let model = ChartScreenModel()
+        #expect(model.destination == .allCharts)
+        #expect(model.tabs.isEmpty)
+
+        let first = UUID()
+        let second = UUID()
+        model.openChart(first)
+        model.openChart(second, destination: .dasha)
+
+        #expect(model.tabs.count == 2)
+        #expect(model.activeChartID == second)
+        #expect(model.destination == .dasha)
+
+        model.openChart(first)
+        #expect(model.tabs.count == 2)
+        #expect(model.activeChartID == first)
+        #expect(model.destination == .overview)
+    }
+
+    @Test func sidebarPageIsRememberedPerTabAndLibraryKeepsTheSelection() {
+        let model = ChartScreenModel()
+        let first = UUID()
+        let second = UUID()
+        model.openChart(first)
+        model.destination = .strength
+        model.openChart(second)
+        #expect(model.destination == .overview)
+
+        model.showLibrary()
+        #expect(model.highlightedTabID == nil)
+        #expect(model.activeChartID == second)
+
+        model.selectAdjacentTab(offset: 1) // wraps around to the first tab
+        #expect(model.activeChartID == first)
+        #expect(model.destination == .strength)
+    }
+
+    @Test func closingTheLastTabReturnsToTheLibrary() {
+        let model = ChartScreenModel(chartID: UUID())
+        #expect(model.destination == .overview)
+
+        model.closeSelectedTab()
+
+        #expect(model.tabs.isEmpty)
+        #expect(model.activeChartID == nil)
+        #expect(model.destination == .allCharts)
+    }
+
+    @Test func closingAMiddleTabSelectsItsNeighbour() {
+        let model = ChartScreenModel()
+        let ids = [UUID(), UUID(), UUID()]
+        for id in ids {
+            model.openChart(id)
+        }
+        model.selectTab(model.tabs[1].id)
+
+        model.closeSelectedTab()
+
+        #expect(model.tabs.count == 2)
+        #expect(model.activeChartID == ids[2])
+    }
 }
 
 @MainActor
