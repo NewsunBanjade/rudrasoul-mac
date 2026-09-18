@@ -6,6 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		8707B44C305CF0D600972AD1 /* agents.md in Resources */ = {isa = PBXBuildFile; fileRef = 8707B448305CF0D600972AD1 /* agents.md */; };
+		8707B4A3305CF3D400972AD1 /* MEMORY.md in Resources */ = {isa = PBXBuildFile; fileRef = 8707B4A0305CF3D400972AD1 /* MEMORY.md */; };
+		8707B4A5305CF3D400972AD1 /* TODO.md in Resources */ = {isa = PBXBuildFile; fileRef = 8707B4A2305CF3D400972AD1 /* TODO.md */; };
+		E9E00001305CF3D400972AD1 /* EphemerisKit in Frameworks */ = {isa = PBXBuildFile; productRef = E9E00002305CF3D400972AD1 /* EphemerisKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		8707B428305BF6A600972AD1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +34,9 @@
 		8707B41A305BF6A500972AD1 /* rudrasoul-jyotish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "rudrasoul-jyotish.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8707B427305BF6A600972AD1 /* rudrasoul-jyotishTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "rudrasoul-jyotishTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8707B431305BF6A600972AD1 /* rudrasoul-jyotishUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "rudrasoul-jyotishUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8707B448305CF0D600972AD1 /* agents.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = agents.md; sourceTree = "<group>"; };
+		8707B4A0305CF3D400972AD1 /* MEMORY.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MEMORY.md; sourceTree = "<group>"; };
+		8707B4A2305CF3D400972AD1 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -45,6 +55,11 @@
 			path = "rudrasoul-jyotishUITests";
 			sourceTree = "<group>";
 		};
+		8707B4D2305CF3F500972AD1 /* screen */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = screen;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E9E00001305CF3D400972AD1 /* EphemerisKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +95,10 @@
 				8707B42A305BF6A600972AD1 /* rudrasoul-jyotishTests */,
 				8707B434305BF6A600972AD1 /* rudrasoul-jyotishUITests */,
 				8707B41B305BF6A500972AD1 /* Products */,
+				8707B4A0305CF3D400972AD1 /* MEMORY.md */,
+				8707B4A2305CF3D400972AD1 /* TODO.md */,
+				8707B4D2305CF3F500972AD1 /* screen */,
+				8707B448305CF0D600972AD1 /* agents.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -112,6 +132,7 @@
 			);
 			name = "rudrasoul-jyotish";
 			packageProductDependencies = (
+				E9E00002305CF3D400972AD1 /* EphemerisKit */,
 			);
 			productName = "rudrasoul-jyotish";
 			productReference = 8707B41A305BF6A500972AD1 /* rudrasoul-jyotish.app */;
@@ -191,10 +212,14 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				ne,
 				Base,
 			);
 			mainGroup = 8707B411305BF6A500972AD1;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				E9E00003305CF3D400972AD1 /* XCLocalSwiftPackageReference "Packages/JyotishKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8707B41B305BF6A500972AD1 /* Products */;
 			projectDirPath = "";
@@ -212,6 +237,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8707B44C305CF0D600972AD1 /* agents.md in Resources */,
+				8707B4A3305CF3D400972AD1 /* MEMORY.md in Resources */,
+				8707B4A5305CF3D400972AD1 /* TODO.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,7 +351,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 26.2;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -381,7 +409,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 26.2;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -416,8 +444,9 @@
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
@@ -448,8 +477,9 @@
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
 		};
@@ -461,15 +491,16 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3QRB9SALNV;
 				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 26.2;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "np.com.newsun.rudrasoul-jyotishTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/rudrasoul-jyotish.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/rudrasoul-jyotish";
 			};
 			name = Debug;
@@ -482,15 +513,16 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3QRB9SALNV;
 				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 26.2;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "np.com.newsun.rudrasoul-jyotishTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/rudrasoul-jyotish.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/rudrasoul-jyotish";
 			};
 			name = Release;
@@ -508,8 +540,9 @@
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TEST_TARGET_NAME = "rudrasoul-jyotish";
 			};
 			name = Debug;
@@ -527,8 +560,9 @@
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TEST_TARGET_NAME = "rudrasoul-jyotish";
 			};
 			name = Release;
@@ -573,6 +607,21 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		E9E00003305CF3D400972AD1 /* XCLocalSwiftPackageReference "Packages/JyotishKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/JyotishKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E9E00002305CF3D400972AD1 /* EphemerisKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E9E00003305CF3D400972AD1 /* XCLocalSwiftPackageReference "Packages/JyotishKit" */;
+			productName = EphemerisKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8707B412305BF6A500972AD1 /* Project object */;
 }

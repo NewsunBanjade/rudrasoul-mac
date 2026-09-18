@@ -1,0 +1,12 @@
+{
+  "": {
+    "swift-dependencies": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKitTests.build/master.swiftdeps"
+  },
+  "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Tests/EphemerisKitTests/SwissEphemerisTests.swift": {
+    "dependencies": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKitTests.build/SwissEphemerisTests.d",
+    "object": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKitTests.build/SwissEphemerisTests.swift.o",
+    "swiftmodule": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKitTests.build/SwissEphemerisTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKitTests.build/SwissEphemerisTests.swiftdeps",
+    "diagnostics": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKitTests.build/SwissEphemerisTests.dia"
+  }
+}

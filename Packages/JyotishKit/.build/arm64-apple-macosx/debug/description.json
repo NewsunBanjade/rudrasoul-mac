@@ -1,0 +1,825 @@
+{
+  "builtTestProducts" : [
+    {
+      "binaryPath" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.xctest/Contents/MacOS/JyotishKitPackageTests",
+      "packagePath" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit",
+      "productName" : "JyotishKitPackageTests"
+    }
+  ],
+  "copyCommands" : {
+    "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKit_EphemerisKit.bundle/Resources" : {
+      "inputs" : [
+        {
+          "kind" : "directory",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/Resources"
+        }
+      ],
+      "outputs" : [
+        {
+          "kind" : "directory",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKit_EphemerisKit.bundle/Resources"
+        }
+      ]
+    }
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.EphemerisKit-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/sources",
+      "importPath" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/EphemerisProviding.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/EphemerisTypes.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/SwissEphemeris.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/DerivedSources/resource_bundle_accessor.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "virtual",
+          "name" : "<EphemerisKit-arm64-apple-macosx26.0-debug.module-resources>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/CSwissEph.build/JPSwissEph.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/CSwissEph.build/swecl.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/CSwissEph.build/swedate.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/CSwissEph.build/swehouse.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/CSwissEph.build/swejpl.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/CSwissEph.build/swemmoon.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/CSwissEph.build/swemplan.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/CSwissEph.build/sweph.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/CSwissEph.build/swephlib.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "EphemerisKit",
+      "moduleOutputPath" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/Modules/EphemerisKit.swiftmodule",
+      "objects" : [
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/EphemerisProviding.swift.o",
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/EphemerisTypes.swift.o",
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/SwissEphemeris.swift.o",
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/resource_bundle_accessor.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_AVAILABLE",
+        "-Xcc",
+        "-fmodule-map-file=/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/CSwissEph/include/module.modulemap",
+        "-Xcc",
+        "-I",
+        "-Xcc",
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/CSwissEph/include",
+        "-module-cache-path",
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/include/EphemerisKit-Swift.h",
+        "-swift-version",
+        "6",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "jyotishkit"
+      ],
+      "outputFileMapPath" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/EphemerisProviding.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/EphemerisTypes.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/SwissEphemeris.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/resource_bundle_accessor.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/Modules/EphemerisKit.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/EphemerisProviding.swift",
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/EphemerisTypes.swift",
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/SwissEphemeris.swift",
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/DerivedSources/resource_bundle_accessor.swift"
+      ],
+      "tempsPath" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.EphemerisKitTests-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKitTests.build/sources",
+      "importPath" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Tests/EphemerisKitTests/SwissEphemerisTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/Modules/EphemerisKit.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKitTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "EphemerisKitTests",
+      "moduleOutputPath" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/Modules/EphemerisKitTests.swiftmodule",
+      "objects" : [
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKitTests.build/SwissEphemerisTests.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-Xcc",
+        "-fmodule-map-file=/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/CSwissEph/include/module.modulemap",
+        "-Xcc",
+        "-I",
+        "-Xcc",
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/CSwissEph/include",
+        "-module-cache-path",
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-swift-version",
+        "6",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "jyotishkit"
+      ],
+      "outputFileMapPath" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKitTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKitTests.build/SwissEphemerisTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/Modules/EphemerisKitTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Tests/EphemerisKitTests/SwissEphemerisTests.swift"
+      ],
+      "tempsPath" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKitTests.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.JyotishKitPackageTests-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.build/sources",
+      "importPath" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.derived/runner.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/Modules/EphemerisKitTests.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "JyotishKitPackageTests",
+      "moduleOutputPath" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/Modules/JyotishKitPackageTests.swiftmodule",
+      "objects" : [
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.build/runner.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-Xcc",
+        "-fmodule-map-file=/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/CSwissEph/include/module.modulemap",
+        "-Xcc",
+        "-I",
+        "-Xcc",
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/CSwissEph/include",
+        "-module-cache-path",
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.build/include/JyotishKitPackageTests-Swift.h",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "jyotishkit"
+      ],
+      "outputFileMapPath" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.build/runner.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/Modules/JyotishKitPackageTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.derived/runner.swift"
+      ],
+      "tempsPath" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.build",
+      "wholeModuleOptimization" : false
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "EphemerisKit" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "EphemerisKit",
+      "-package-name",
+      "jyotishkit",
+      "-c",
+      "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/EphemerisProviding.swift",
+      "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/EphemerisTypes.swift",
+      "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/SwissEphemeris.swift",
+      "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/DerivedSources/resource_bundle_accessor.swift",
+      "-I",
+      "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j10",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_AVAILABLE",
+      "-Xcc",
+      "-fmodule-map-file=/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/CSwissEph/include/module.modulemap",
+      "-Xcc",
+      "-I",
+      "-Xcc",
+      "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/CSwissEph/include",
+      "-module-cache-path",
+      "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/include/EphemerisKit-Swift.h",
+      "-swift-version",
+      "6",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "jyotishkit",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "EphemerisKitTests" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "EphemerisKitTests",
+      "-package-name",
+      "jyotishkit",
+      "-c",
+      "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Tests/EphemerisKitTests/SwissEphemerisTests.swift",
+      "-I",
+      "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j10",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-Xcc",
+      "-fmodule-map-file=/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/CSwissEph/include/module.modulemap",
+      "-Xcc",
+      "-I",
+      "-Xcc",
+      "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/CSwissEph/include",
+      "-module-cache-path",
+      "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-swift-version",
+      "6",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "jyotishkit",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "JyotishKitPackageTests" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "JyotishKitPackageTests",
+      "-package-name",
+      "jyotishkit",
+      "-c",
+      "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.derived/runner.swift",
+      "-I",
+      "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j10",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-Xcc",
+      "-fmodule-map-file=/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/CSwissEph/include/module.modulemap",
+      "-Xcc",
+      "-I",
+      "-Xcc",
+      "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/CSwissEph/include",
+      "-module-cache-path",
+      "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.build/include/JyotishKitPackageTests-Swift.h",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "jyotishkit",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "CSwissEph" : [
+
+    ],
+    "EphemerisKit" : [
+      "CSwissEph"
+    ],
+    "EphemerisKitTests" : [
+      "EphemerisKit",
+      "CSwissEph"
+    ],
+    "JyotishKitPackageTests" : [
+      "EphemerisKitTests",
+      "EphemerisKit",
+      "CSwissEph"
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+    "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.derived/runner.swift" : {
+      "inputs" : [
+
+      ],
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.derived/runner.swift"
+        }
+      ]
+    }
+  },
+  "traitConfiguration" : {
+    "default" : {
+
+    }
+  },
+  "writeCommands" : {
+    "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/EphemerisProviding.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/EphemerisTypes.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/SwissEphemeris.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/DerivedSources/resource_bundle_accessor.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/sources"
+    },
+    "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKitTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Tests/EphemerisKitTests/SwissEphemerisTests.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKitTests.build/sources"
+    },
+    "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.derived/runner.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.build/sources"
+    },
+    "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/CSwissEph.build/JPSwissEph.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/CSwissEph.build/swecl.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/CSwissEph.build/swedate.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/CSwissEph.build/swehouse.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/CSwissEph.build/swejpl.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/CSwissEph.build/swemmoon.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/CSwissEph.build/swemplan.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/CSwissEph.build/sweph.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/CSwissEph.build/swephlib.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/EphemerisProviding.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/EphemerisTypes.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/SwissEphemeris.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/resource_bundle_accessor.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKitTests.build/SwissEphemerisTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.build/runner.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/JyotishKitPackageTests.product/Objects.LinkFileList"
+    },
+    "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+    }
+  }
+}

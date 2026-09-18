@@ -1,0 +1,1429 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+
+    },
+    "-1D" : {
+
+    },
+    "-1M" : {
+
+    },
+    "-1Y" : {
+
+    },
+    "—" : {
+
+    },
+    "(%lld)" : {
+
+    },
+    "#" : {
+
+    },
+    "#%lld" : {
+
+    },
+    "%@ - %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ - %2$lld"
+          }
+        }
+      }
+    },
+    "%@ · %@ · %@ (%@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ · %2$@ · %3$@ (%4$@)"
+          }
+        }
+      }
+    },
+    "%@ (%@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ (%2$@)"
+          }
+        }
+      }
+    },
+    "%@ (H%lld As)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ (H%2$lld As)"
+          }
+        }
+      }
+    },
+    "%@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "%@ Lagna" : {
+
+    },
+    "%@, %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, %2$@"
+          }
+        }
+      }
+    },
+    "%lld" : {
+
+    },
+    "%lld Classical Combinations" : {
+
+    },
+    "%lld of %lld Charts" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld of %2$lld Charts"
+          }
+        }
+      }
+    },
+    "%lldth Bhava" : {
+
+    },
+    "• %@ (%@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "• %1$@ (%2$@)"
+          }
+        }
+      }
+    },
+    "• Corner cells contain initial Sanskrit vowels (A, Aa, I, Ee)" : {
+
+    },
+    "• Front, Right, and Left Vedha rays indicate auspicious or afflictive cross-aspects" : {
+
+    },
+    "• Inner circles harbor consonants, rasis, and tithis" : {
+
+    },
+    "• Perimeter hosts the 28 lunar mansions including Abhijit" : {
+
+    },
+    "⇄" : {
+
+    },
+    "+ New Chart..." : {
+
+    },
+    "+1D" : {
+
+    },
+    "+1M" : {
+
+    },
+    "+1Y" : {
+
+    },
+    "± 5 Minutes" : {
+
+    },
+    "± 15 Minutes" : {
+
+    },
+    "28 Nakshatras with Abhijit" : {
+
+    },
+    "A.D. (Gregorian)" : {
+
+    },
+    "Accuracy" : {
+
+    },
+    "Active Period in Current Focus" : {
+
+    },
+    "Active: %@" : {
+
+    },
+    "Add Clinical Observation" : {
+
+    },
+    "Adhi Mitra" : {
+
+    },
+    "Advanced" : {
+
+    },
+    "Age" : {
+
+    },
+    "All" : {
+
+    },
+    "All Signs" : {
+
+    },
+    "Appearance" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appearance"
+          }
+        },
+        "ne" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "रूप"
+          }
+        }
+      }
+    },
+    "Approximate" : {
+
+    },
+    "Auspicious" : {
+
+    },
+    "Autosaved to library" : {
+
+    },
+    "Ayanamsa" : {
+
+    },
+    "Ayanamsa: %@" : {
+
+    },
+    "Ayanamsa: %@ · %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Ayanamsa: %1$@ · %2$@"
+          }
+        }
+      }
+    },
+    "B.S. (Bikram Sambat)" : {
+
+    },
+    "Bahya (Outer)" : {
+
+    },
+    "Bhanga Note: %@" : {
+
+    },
+    "Bhava" : {
+
+    },
+    "Bhava (Nat)" : {
+
+    },
+    "Bhava / House System" : {
+
+    },
+    "Bhava Chalit & House Cusps" : {
+
+    },
+    "Bhavat Bhavam: D-1 (H%lld · %@), D-9 (H%lld · %@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bhavat Bhavam: D-1 (H%1$lld · %2$@), D-9 (H%3$lld · %4$@)"
+          }
+        }
+      }
+    },
+    "Bhavat Bhavam: D-1 viewed from House %lld (%@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bhavat Bhavam: D-1 viewed from House %1$lld (%2$@)"
+          }
+        }
+      }
+    },
+    "Bhavat Bhavam: D-9 Navamsha viewed from House %lld (%@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bhavat Bhavam: D-9 Navamsha viewed from House %1$lld (%2$@)"
+          }
+        }
+      }
+    },
+    "Bhavat Bhavam: House %lld (%@) as Lagna in %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bhavat Bhavam: House %1$lld (%2$@) as Lagna in %3$@"
+          }
+        }
+      }
+    },
+    "Bhinnashtakavarga (Individual Planet BAV)" : {
+
+    },
+    "Birth Coordinates" : {
+
+    },
+    "Calculations" : {
+
+    },
+    "Cancel" : {
+
+    },
+    "Chakra Legend" : {
+
+    },
+    "Challenging" : {
+
+    },
+    "Chart Display Style" : {
+
+    },
+    "chart.header.unavailable.subtitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verified birth data has not been loaded"
+          }
+        }
+      }
+    },
+    "chart.header.unavailable.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chart workspace"
+          }
+        }
+      }
+    },
+    "chart.inspector.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inspector"
+          }
+        }
+      }
+    },
+    "chart.inspector.unavailable.description" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select verified chart data to inspect its details."
+          }
+        }
+      }
+    },
+    "chart.inspector.unavailable.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No selection"
+          }
+        }
+      }
+    },
+    "chart.sidebar.analysis" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chart"
+          }
+        }
+      }
+    },
+    "chart.sidebar.ashtakavarga" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ashtakavarga"
+          }
+        }
+      }
+    },
+    "chart.sidebar.chakras" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chakras"
+          }
+        }
+      }
+    },
+    "chart.sidebar.dasha" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dasha (Vimshottari)"
+          }
+        }
+      }
+    },
+    "chart.sidebar.divisionalCharts" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Divisional charts"
+          }
+        }
+      }
+    },
+    "chart.sidebar.kota" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kota Chakra"
+          }
+        }
+      }
+    },
+    "chart.sidebar.nakshatra" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nakshatra"
+          }
+        }
+      }
+    },
+    "chart.sidebar.notesAndPredictions" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notes & Predictions"
+          }
+        }
+      }
+    },
+    "chart.sidebar.overview" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overview"
+          }
+        }
+      }
+    },
+    "chart.sidebar.planetsAndHouses" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Planets & Houses"
+          }
+        }
+      }
+    },
+    "chart.sidebar.progressionAndTransit" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Progression & Transit"
+          }
+        }
+      }
+    },
+    "chart.sidebar.sarvatobhadra" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sarvatobhadra (SBC)"
+          }
+        }
+      }
+    },
+    "chart.sidebar.strength" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strength (Shadbala)"
+          }
+        }
+      }
+    },
+    "chart.sidebar.title" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chart"
+          }
+        }
+      }
+    },
+    "chart.sidebar.tools" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tools"
+          }
+        }
+      }
+    },
+    "chart.sidebar.yogasAndDoshas" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yogas & Doshas"
+          }
+        }
+      }
+    },
+    "chart.status.dataUnavailable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chart data unavailable"
+          }
+        }
+      }
+    },
+    "chart.status.settingsUnavailable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ayanamsa and node settings unavailable"
+          }
+        }
+      }
+    },
+    "chart.toolbar.inspector" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toggle inspector"
+          }
+        }
+      }
+    },
+    "chart.toolbar.print" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Print"
+          }
+        }
+      }
+    },
+    "chart.toolbar.share" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share"
+          }
+        }
+      }
+    },
+    "chart.window.title" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chart"
+          }
+        }
+      }
+    },
+    "chart.workspace.unavailable.description" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This workspace will populate after a trusted chart fixture and calculation service are connected."
+          }
+        }
+      }
+    },
+    "Cheshta" : {
+
+    },
+    "City / Atlas Lookup" : {
+
+    },
+    "City name" : {
+
+    },
+    "Classical Interpretation" : {
+
+    },
+    "Classical Yogas & Doshas (%lld Formed)" : {
+
+    },
+    "Clear All" : {
+
+    },
+    "Clear search" : {
+
+    },
+    "Compound" : {
+
+    },
+    "Compound Maitri (Pancha-da)" : {
+
+    },
+    "Cusp Longitude" : {
+
+    },
+    "D-1 Kundali" : {
+
+    },
+    "D-1 Rasi Kundali" : {
+
+    },
+    "D-9 Navamsha Kundali" : {
+
+    },
+    "Dark" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark"
+          }
+        },
+        "ne" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "गाढा"
+          }
+        }
+      }
+    },
+    "Dasha Inspector" : {
+
+    },
+    "Dasha Year Length" : {
+
+    },
+    "Dasha: %@" : {
+
+    },
+    "Date of Birth" : {
+
+    },
+    "Daylight Saving Time (DST)" : {
+
+    },
+    "Default Ayanamsa" : {
+
+    },
+    "Default Calendar" : {
+
+    },
+    "Default Chart Style" : {
+
+    },
+    "Default House System" : {
+
+    },
+    "Defense & Protection Analysis" : {
+
+    },
+    "Delete Chart" : {
+
+    },
+    "Detailed Bala Components (Virupas)" : {
+
+    },
+    "Dignity" : {
+
+    },
+    "Dik" : {
+
+    },
+    "Direction of Movement (Gati)" : {
+
+    },
+    "Display" : {
+
+    },
+    "Divisional Chart" : {
+
+    },
+    "Drik" : {
+
+    },
+    "Duration" : {
+
+    },
+    "e.g., Siddhartha Gautam" : {
+
+    },
+    "End Date" : {
+
+    },
+    "Enter birth coordinates, temporal calendar, and calculation settings" : {
+
+    },
+    "Ephemeris" : {
+
+    },
+    "Ephemeris Engine" : {
+
+    },
+    "Ephemeris Path" : {
+
+    },
+    "Equal Bhava" : {
+
+    },
+    "Esc closes" : {
+
+    },
+    "Exact (to second)" : {
+
+    },
+    "Exalted lord active in auspicious house, conferring creative brilliance, philosophical honors, and widespread public respect." : {
+
+    },
+    "Fagan / Bradley" : {
+
+    },
+    "Fagan/Bradley" : {
+
+    },
+    "Favorable" : {
+
+    },
+    "Female" : {
+
+    },
+    "Filter" : {
+
+    },
+    "Filter Charts" : {
+
+    },
+    "Filters:" : {
+
+    },
+    "Focus: %@" : {
+
+    },
+    "Focused" : {
+
+    },
+    "Formed Yogas Count" : {
+
+    },
+    "Fortress Dignitaries" : {
+
+    },
+    "Friend" : {
+
+    },
+    "Full Potency" : {
+
+    },
+    "Gana" : {
+
+    },
+    "Gender" : {
+
+    },
+    "Graha" : {
+
+    },
+    "H%lld · %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "H%1$lld · %2$@"
+          }
+        }
+      }
+    },
+    "Hide Dasha Inspector" : {
+
+    },
+    "House" : {
+
+    },
+    "House from Natal Moon" : {
+
+    },
+    "Individual BAV bindu breakdown available in classical ephemeris mode." : {
+
+    },
+    "Initial Observations" : {
+
+    },
+    "IST (India) UTC+05:30" : {
+
+    },
+    "Kala" : {
+
+    },
+    "Karaka" : {
+
+    },
+    "Kota Chakra (Fortress Mandala)" : {
+
+    },
+    "Krishnamurti (KP)" : {
+
+    },
+    "Kundali Visuals" : {
+
+    },
+    "Lagna" : {
+
+    },
+    "Lagna (Ascendant)" : {
+
+    },
+    "Lahiri (Chitra Paksha)" : {
+
+    },
+    "Latitude" : {
+
+    },
+    "library.allCharts.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All charts"
+          }
+        }
+      }
+    },
+    "library.column.date" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date"
+          }
+        }
+      }
+    },
+    "library.column.location" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location"
+          }
+        }
+      }
+    },
+    "library.column.name" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        }
+      }
+    },
+    "library.empty.description" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Charts you create or import will appear here."
+          }
+        }
+      }
+    },
+    "library.empty.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No charts"
+          }
+        }
+      }
+    },
+    "library.error.load" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The chart library could not be loaded."
+          }
+        }
+      }
+    },
+    "library.error.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to load library"
+          }
+        }
+      }
+    },
+    "library.search.prompt" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search charts"
+          }
+        }
+      }
+    },
+    "library.sidebar.allCharts" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All charts"
+          }
+        }
+      }
+    },
+    "library.sidebar.recent" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recent"
+          }
+        }
+      }
+    },
+    "library.sidebar.section" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Library"
+          }
+        }
+      }
+    },
+    "library.status.count %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld charts"
+          }
+        }
+      }
+    },
+    "library.table.accessibilityLabel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chart library"
+          }
+        }
+      }
+    },
+    "library.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jyotish Pro"
+          }
+        }
+      }
+    },
+    "library.toolbar.newChart" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New chart"
+          }
+        }
+      }
+    },
+    "library.toolbar.open" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open chart"
+          }
+        }
+      }
+    },
+    "Lifespan Mahadasha Continuum (120y Cycle)" : {
+
+    },
+    "Light" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light"
+          }
+        },
+        "ne" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "उज्यालो"
+          }
+        }
+      }
+    },
+    "LMT (Local Mean Time)" : {
+
+    },
+    "Logged Predictions & Verification Outcomes" : {
+
+    },
+    "Longitude" : {
+
+    },
+    "Lord" : {
+
+    },
+    "Lord / Level" : {
+
+    },
+    "Lunar Node (Rahu / Ketu)" : {
+
+    },
+    "Lunar Node (Rahu/Ketu)" : {
+
+    },
+    "Madhya" : {
+
+    },
+    "Male" : {
+
+    },
+    "Mean Node" : {
+
+    },
+    "Mitra" : {
+
+    },
+    "Moon" : {
+
+    },
+    "Moon Sign" : {
+
+    },
+    "Moon Sign (Chandra Rasi)" : {
+
+    },
+    "Moon Star" : {
+
+    },
+    "Naisargika" : {
+
+    },
+    "Nakshatra" : {
+
+    },
+    "Nakshatra (Pada)" : {
+
+    },
+    "Nakshatra & Pada" : {
+
+    },
+    "Name" : {
+
+    },
+    "Natal Rasi & Longitude" : {
+
+    },
+    "Natural" : {
+
+    },
+    "New Chart" : {
+
+    },
+    "Nirgama (Exiting)" : {
+
+    },
+    "No Charts Match Filters" : {
+
+    },
+    "North Indian" : {
+
+    },
+    "North Indian (Diamond)" : {
+
+    },
+    "Now" : {
+
+    },
+    "NST (Nepal) UTC+05:45" : {
+
+    },
+    "Occupants" : {
+
+    },
+    "Open Chart" : {
+
+    },
+    "Open Chart in Overview" : {
+
+    },
+    "Other" : {
+
+    },
+    "Pancha Mahapurusha" : {
+
+    },
+    "Placidus" : {
+
+    },
+    "Planet Placements in %@" : {
+
+    },
+    "Planetary Positions & Dignities" : {
+
+    },
+    "Practitioner Notes" : {
+
+    },
+    "Prakara (Wall)" : {
+
+    },
+    "Pravesha (Entering)" : {
+
+    },
+    "Prediction Journal" : {
+
+    },
+    "Predictive Indications" : {
+
+    },
+    "Presiding Deity" : {
+
+    },
+    "R" : {
+
+    },
+    "Raja Yoga" : {
+
+    },
+    "Raman" : {
+
+    },
+    "Rank" : {
+
+    },
+    "Rank #%lld" : {
+
+    },
+    "Rasi" : {
+
+    },
+    "Rectified" : {
+
+    },
+    "Required Threshold: 1.00 Rupa (60 Virupas = 1 Rupa)" : {
+
+    },
+    "Reset" : {
+
+    },
+    "Reset All" : {
+
+    },
+    "Reset Both" : {
+
+    },
+    "Reset D-1" : {
+
+    },
+    "Reset D-1 to Natal Lagna" : {
+
+    },
+    "Reset D-9" : {
+
+    },
+    "Reset D-9 to Natal Lagna" : {
+
+    },
+    "Reset Filters" : {
+
+    },
+    "Reset to Natal Lagna" : {
+
+    },
+    "Resident Planets" : {
+
+    },
+    "Role" : {
+
+    },
+    "Ruler Graha" : {
+
+    },
+    "Running Dasha" : {
+
+    },
+    "Running Mahadasha" : {
+
+    },
+    "Sarvashtakavarga (SAV)" : {
+
+    },
+    "Sarvatobhadra Chakra (9×9 Mandala)" : {
+
+    },
+    "Savana (360 days)" : {
+
+    },
+    "Save & Open Chart" : {
+
+    },
+    "Save Note" : {
+
+    },
+    "Shadbala (Sixfold Planetary Strength)" : {
+
+    },
+    "Show chart from this house (House %lld - %@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show chart from this house (House %1$lld - %2$@)"
+          }
+        }
+      }
+    },
+    "Show chart from this house (House %lld%@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show chart from this house (House %1$lld%2$@)"
+          }
+        }
+      }
+    },
+    "Show Dasha Inspector" : {
+
+    },
+    "Show Devanagari numerals in Nepali locale" : {
+
+    },
+    "Significations" : {
+
+    },
+    "Solar (365.2422 days)" : {
+
+    },
+    "Source: %@" : {
+
+    },
+    "South Indian" : {
+
+    },
+    "South Indian\nFixed Zodiac" : {
+
+    },
+    "South Indian (Square)" : {
+
+    },
+    "Speed (°/day)" : {
+
+    },
+    "Sripati" : {
+
+    },
+    "STAMBHA" : {
+
+    },
+    "Start Date" : {
+
+    },
+    "Status" : {
+
+    },
+    "Sthana" : {
+
+    },
+    "Strong" : {
+
+    },
+    "Style" : {
+
+    },
+    "Subject Name" : {
+
+    },
+    "Swiss Ephemeris DE440 · Online" : {
+
+    },
+    "Swiss Ephemeris Engine" : {
+
+    },
+    "System Default" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System Default"
+          }
+        },
+        "ne" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "प्रणालीको पूर्वनिर्धारित"
+          }
+        }
+      }
+    },
+    "Target Date:" : {
+
+    },
+    "Target Date: %@" : {
+
+    },
+    "Temporal" : {
+
+    },
+    "Thread Safety" : {
+
+    },
+    "Time of Birth & Accuracy" : {
+
+    },
+    "Time Zone" : {
+
+    },
+    "Toggle Sidebar (⌃⌘S)" : {
+
+    },
+    "Total (Rupas)" : {
+
+    },
+    "Total Samudaya Bindus: %lld (Standard 337) · Standard Sign Threshold: ≥ 28 Bindus" : {
+
+    },
+    "Transit Position (Gochara)" : {
+
+    },
+    "Transit Quality" : {
+
+    },
+    "Transit Target:" : {
+
+    },
+    "Tropical (Sayana)" : {
+
+    },
+    "True Node" : {
+
+    },
+    "Try adjusting your search terms or clearing astrological filters." : {
+
+    },
+    "Try clearing some astrological filters or changing your search query." : {
+
+    },
+    "Use Local Mean Time (LMT) for pre-1906 epoch" : {
+
+    },
+    "UTC (GMT)" : {
+
+    },
+    "Vargottama" : {
+
+    },
+    "Vedha Rays & Aspect Lines" : {
+
+    },
+    "Version" : {
+
+    },
+    "Vimshottari · Moon · Solar 365.2422" : {
+
+    },
+    "Vimshottari Hierarchy (MD › AD › PD › SD › PrD)" : {
+
+    },
+    "Vimshottari Mahadasha Timeline" : {
+
+    },
+    "Viparita Raja Yoga" : {
+
+    },
+    "Weak" : {
+
+    },
+    "When benefics like Jupiter and Moon reside in the Stambha (core) during Pravesha, the native's position remains unassailable and health remains robust against adversity." : {
+
+    },
+    "Whole Sign" : {
+
+    }
+  },
+  "version" : "1.0"
+}

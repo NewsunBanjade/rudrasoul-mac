@@ -1,21 +1,14 @@
-//
-//  ContentView.swift
-//  rudrasoul-jyotish
-//
-//  Created by Newsun on 9/17/26.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+    @State private var model = ChartScreenModel()
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        ChartScreen(model: model)
+            .frame(
+                minWidth: DesignSize.chartMinimumWidth,
+                minHeight: DesignSize.chartMinimumHeight
+            )
     }
 }
 

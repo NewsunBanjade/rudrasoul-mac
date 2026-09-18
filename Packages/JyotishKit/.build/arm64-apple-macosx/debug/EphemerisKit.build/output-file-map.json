@@ -1,0 +1,33 @@
+{
+  "": {
+    "swift-dependencies": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/master.swiftdeps"
+  },
+  "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/EphemerisProviding.swift": {
+    "dependencies": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/EphemerisProviding.d",
+    "object": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/EphemerisProviding.swift.o",
+    "swiftmodule": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/EphemerisProviding~partial.swiftmodule",
+    "swift-dependencies": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/EphemerisProviding.swiftdeps",
+    "diagnostics": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/EphemerisProviding.dia"
+  },
+  "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/EphemerisTypes.swift": {
+    "dependencies": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/EphemerisTypes.d",
+    "object": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/EphemerisTypes.swift.o",
+    "swiftmodule": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/EphemerisTypes~partial.swiftmodule",
+    "swift-dependencies": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/EphemerisTypes.swiftdeps",
+    "diagnostics": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/EphemerisTypes.dia"
+  },
+  "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/Sources/EphemerisKit/SwissEphemeris.swift": {
+    "dependencies": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/SwissEphemeris.d",
+    "object": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/SwissEphemeris.swift.o",
+    "swiftmodule": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/SwissEphemeris~partial.swiftmodule",
+    "swift-dependencies": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/SwissEphemeris.swiftdeps",
+    "diagnostics": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/SwissEphemeris.dia"
+  },
+  "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/DerivedSources/resource_bundle_accessor.swift": {
+    "dependencies": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/resource_bundle_accessor.d",
+    "object": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/resource_bundle_accessor.swift.o",
+    "swiftmodule": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/resource_bundle_accessor~partial.swiftmodule",
+    "swift-dependencies": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/resource_bundle_accessor.swiftdeps",
+    "diagnostics": "/Users/newsun/Documents/rudrasoul-jyotish/Packages/JyotishKit/.build/arm64-apple-macosx/debug/EphemerisKit.build/resource_bundle_accessor.dia"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "source": "Swiss Ephemeris 2.10.03 swetest",
+  "upstreamCommit": "9083a12d59e98034fb2337061481ac8800c16e64",
+  "command": "swetest -b1.1.2000 -ut12:00 -p0123456mt -fPZBRS -sid1 -emos",
+  "settings": {
+    "julianDayUT": 2451545.0,
+    "ephemeris": "Moshier",
+    "ayanamsa": "Lahiri"
+  },
+  "longitudesDegrees": {
+    "sun": 256.5156971944,
+    "moon": 199.4705530000,
+    "mercury": 248.0360525278,
+    "venus": 217.7125758333,
+    "mars": 304.1100908333,
+    "jupiter": 1.3998078333,
+    "saturn": 16.5424164722,
+    "meanNode": 101.1874235833,
+    "trueNode": 100.0996729167
+  },
+  "swissDataReference": {
+    "command": "swetest -b1.1.2000 -ut12:00 -p0123456mt -fPZBRS -sid1 -edir<bundled-ephe-path> -eswe",
+    "longitudesDegrees": {
+      "sun": 256.5156961944,
+      "moon": 199.4705289722,
+      "trueNode": 100.1008003611
+    }
+  },
+  "houseReference": {
+    "command": "swetest -b1.1.2000 -ut12:00 -house85.3240,27.7172,W -fPLBRS -sid1 -emos",
+    "coordinates": {
+      "latitude": 27.7172,
+      "longitude": 85.3240
+    },
+    "system": "wholeSign",
+    "cuspsDegrees": [60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 0, 30],
+    "ascendantDegrees": 83.0001266944,
+    "midheavenDegrees": 342.4437143056,
+    "vertexDegrees": 212.4025475278
+  }
+}
